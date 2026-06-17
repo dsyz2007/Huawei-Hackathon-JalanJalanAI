@@ -2,57 +2,65 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRoute } from '../hooks/useRoute';
 import { getDemoRoute, DEMO_ROUTES, type DemoRouteId } from '../services/demoRouteService';
+import { useLanguage } from '../context/LanguageContext';
 import type { Language } from '../types';
 
 const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'en', label: 'English' },
+  { value: 'singlish', label: 'Singlish' },
+  { value: 'yue', label: '廣東話' },
   { value: 'zh', label: '中文' },
   { value: 'ms', label: 'Melayu' },
   { value: 'ta', label: 'தமிழ்' },
+  { value: 'hi', label: 'हिन्दी' },
 ];
 
 export function HomePage() {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
-  const [language, setLanguage] = useState<Language>('en');
   const [preferShelter, setPreferShelter] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   const { fetchRoute, loading, error } = useRoute();
   const navigate = useNavigate();
 
   async function handleGenerate() {
     if (!origin.trim() || !destination.trim()) return;
     const result = await fetchRoute({ origin, destination, language, preferShelter });
-    if (result) navigate('/route', { state: { route: result, language } });
+    if (result) navigate('/route', { state: { route: result } });
   }
 
   async function handleDemo(id: DemoRouteId) {
     const result = await getDemoRoute(id, language);
-    navigate('/route', { state: { route: result, language } });
+    navigate('/route', { state: { route: result } });
   }
 
   return (
     <div style={{ maxWidth: 480, margin: '0 auto', padding: '32px 20px', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>JalanJalan AI</h1>
-      <p style={{ color: '#6b7280', marginBottom: 28 }}>Simple navigation for everyone</p>
+      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>{t.appName}</h1>
+      <p style={{ color: '#6b7280', marginBottom: 28 }}>{t.tagline}</p>
 
-      <label style={labelStyle}>Starting from</label>
+      <label style={labelStyle}>{t.startingFrom}</label>
       <input
         value={origin}
         onChange={(e) => setOrigin(e.target.value)}
-        placeholder="e.g. Bedok MRT"
+        placeholder={t.originPlaceholder}
         style={inputStyle}
       />
 
-      <label style={labelStyle}>Going to</label>
+      <label style={labelStyle}>{t.goingTo}</label>
       <input
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
-        placeholder="e.g. Bedok Interchange"
+        placeholder={t.destinationPlaceholder}
         style={inputStyle}
       />
 
-      <label style={labelStyle}>Language</label>
-      <select value={language} onChange={(e) => setLanguage(e.target.value as Language)} style={inputStyle}>
+      <label style={labelStyle}>{t.language}</label>
+      <select
+        value={language}
+        onChange={(e) => setLanguage(e.target.value as Language)}
+        style={inputStyle}
+      >
         {LANGUAGES.map((l) => (
           <option key={l.value} value={l.value}>{l.label}</option>
         ))}
@@ -65,7 +73,7 @@ export function HomePage() {
           onChange={(e) => setPreferShelter(e.target.checked)}
           style={{ width: 18, height: 18 }}
         />
-        <span style={{ fontSize: 15 }}>Prefer sheltered routes</span>
+        <span style={{ fontSize: 15 }}>{t.preferShelter}</span>
       </label>
 
       {error && <p style={{ color: '#ef4444', marginBottom: 12 }}>{error}</p>}
@@ -79,11 +87,11 @@ export function HomePage() {
           opacity: loading || !origin.trim() || !destination.trim() ? 0.5 : 1,
         }}
       >
-        {loading ? 'Generating...' : 'Generate Route'}
+        {loading ? t.generating : t.generateRoute}
       </button>
 
       <p style={{ textAlign: 'center', color: '#9ca3af', margin: '24px 0 12px', fontSize: 13 }}>
-        — or try a demo —
+        {t.tryDemo}
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

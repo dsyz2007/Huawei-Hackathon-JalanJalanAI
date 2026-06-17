@@ -3,9 +3,12 @@ import type { Language } from '../types';
 
 const LANG_BCP47: Record<Language, string> = {
   en: 'en-SG',
+  singlish: 'en-SG',
+  yue: 'zh-HK',
   zh: 'zh-CN',
   ms: 'ms-MY',
   ta: 'ta-IN',
+  hi: 'hi-IN',
 };
 
 export function useSpeech() {
