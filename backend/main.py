@@ -1,17 +1,13 @@
-from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-import os
+from fastapi import FastAPI
+import uvicorn
 
-load_dotenv()
+app = FastAPI()
 
-app = Flask(__name__)
+@app.get("/api/example")
+def example(count: int = 0):
+    count += count
 
-@app.route('/api/example', methods=['GET'])
-def example():
-    count = int(request.args.get("count", 0))
-    count += 1
-    print(count)
-    return jsonify({"count": count})
+    return {"count": count}
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)
