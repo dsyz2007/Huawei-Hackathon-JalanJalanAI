@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/api/example")
 def example(count: int = 0):
-    count += count
+    count += 1
 
     return {"count": count}
 
