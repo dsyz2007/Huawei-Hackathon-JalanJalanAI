@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useGPS } from '../hooks/useGPS';
+import { useLanguage } from '../context/LanguageContext';
 
-// Triggers if user hasn't moved >10m in 3 minutes while navigation is active
 const STALE_MS = 3 * 60 * 1000;
 const MOVEMENT_THRESHOLD_M = 10;
 
@@ -12,6 +12,7 @@ interface Props {
 }
 
 export function LostMode({ active, checkpointTarget, onHelp }: Props) {
+  const { t } = useLanguage();
   const { position, distanceToCheckpoint } = useGPS(checkpointTarget);
   const [showHelp, setShowHelp] = useState(false);
   const [lastMovedAt, setLastMovedAt] = useState(Date.now());
@@ -59,10 +60,10 @@ export function LostMode({ active, checkpointTarget, onHelp }: Props) {
         width: '90vw',
       }}
     >
-      <p style={{ fontWeight: 700, fontSize: 18, margin: '0 0 8px' }}>Are you lost?</p>
+      <p style={{ fontWeight: 700, fontSize: 18, margin: '0 0 8px' }}>{t.areYouLost}</p>
       {distanceToCheckpoint !== null && (
         <p style={{ color: '#6b7280', margin: '0 0 12px', fontSize: 14 }}>
-          Next checkpoint is {Math.round(distanceToCheckpoint)}m away.
+          {t.nextCheckpoint(Math.round(distanceToCheckpoint))}
         </p>
       )}
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
@@ -70,13 +71,13 @@ export function LostMode({ active, checkpointTarget, onHelp }: Props) {
           onClick={() => { setShowHelp(false); setLastMovedAt(Date.now()); }}
           style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #e5e7eb', cursor: 'pointer', background: '#fff' }}
         >
-          I'm OK
+          {t.imOk}
         </button>
         <button
           onClick={() => { setShowHelp(false); onHelp(); }}
           style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: '#2563eb', color: '#fff', cursor: 'pointer', fontWeight: 600 }}
         >
-          Need Help
+          {t.needHelp}
         </button>
       </div>
     </div>

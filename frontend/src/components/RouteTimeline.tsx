@@ -1,13 +1,5 @@
+import { useLanguage } from '../context/LanguageContext';
 import type { RouteStep } from '../types';
-
-const ACTION_LABELS: Record<string, string> = {
-  exit_mrt: 'Exit MRT',
-  turn_left: 'Turn Left',
-  turn_right: 'Turn Right',
-  go_straight: 'Go Straight',
-  cross_road: 'Cross Road',
-  arrive: 'Arrive',
-};
 
 interface Props {
   steps: RouteStep[];
@@ -16,6 +8,8 @@ interface Props {
 }
 
 export function RouteTimeline({ steps, currentStep, onSelectStep }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div style={{ padding: '8px 0' }}>
       {steps.map((step, i) => {
@@ -57,7 +51,7 @@ export function RouteTimeline({ steps, currentStep, onSelectStep }: Props) {
             </span>
             <span>
               <span style={{ fontWeight: 600, display: 'block' }}>
-                {ACTION_LABELS[step.checkpoint.action] ?? step.checkpoint.action}
+                {t.actions[step.checkpoint.action] ?? step.checkpoint.action}
               </span>
               {step.landmark && (
                 <span style={{ fontSize: 13, color: '#6b7280' }}>{step.landmark.name}</span>

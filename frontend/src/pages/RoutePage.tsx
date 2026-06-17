@@ -2,27 +2,28 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ProgressTracker } from '../components/ProgressTracker';
 import { RouteTimeline } from '../components/RouteTimeline';
 import { useStoryNavigation } from '../hooks/useStoryNavigation';
-import type { RouteResponse, Language } from '../types';
+import { useLanguage } from '../context/LanguageContext';
+import type { RouteResponse } from '../types';
 
 interface LocationState {
   route: RouteResponse;
-  language: Language;
 }
 
 export function RoutePage() {
   const { state } = useLocation() as { state: LocationState };
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
 
   if (!state?.route) {
     navigate('/');
     return null;
   }
 
-  const { route, language } = state;
+  const { route } = state;
   const { currentStep, goTo } = useStoryNavigation(route.steps.length);
 
   function startNavigation() {
-    navigate('/story', { state: { route, language, initialStep: currentStep } });
+    navigate('/story', { state: { route, initialStep: currentStep } });
   }
 
   return (
@@ -32,9 +33,9 @@ export function RoutePage() {
           onClick={() => navigate('/')}
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: 0, marginBottom: 12 }}
         >
-          ← Back
+          {t.back}
         </button>
-        <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700 }}>Your Route</h2>
+        <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700 }}>{t.yourRoute}</h2>
         <p style={{ color: '#6b7280', margin: '0 0 16px', fontSize: 14 }}>
           {route.distance} · {route.duration}
         </p>
@@ -74,7 +75,7 @@ export function RoutePage() {
             cursor: 'pointer',
           }}
         >
-          Start Navigation
+          {t.startNavigation}
         </button>
       </div>
     </div>
