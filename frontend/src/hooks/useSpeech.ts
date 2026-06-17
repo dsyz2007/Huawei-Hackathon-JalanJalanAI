@@ -5,6 +5,7 @@ const LANG_BCP47: Record<Language, string> = {
   en: 'en-SG',
   singlish: 'en-SG',
   yue: 'zh-HK',
+  teo: 'zh-TW',
   zh: 'zh-CN',
   ms: 'ms-MY',
   ta: 'ta-IN',

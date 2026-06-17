@@ -9,6 +9,7 @@ const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'en', label: 'English' },
   { value: 'singlish', label: 'Singlish' },
   { value: 'yue', label: '廣東話' },
+  { value: 'teo', label: '潮州話' },
   { value: 'zh', label: '中文' },
   { value: 'ms', label: 'Melayu' },
   { value: 'ta', label: 'தமிழ்' },

@@ -67,6 +67,24 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: '到咗喇！宏茂橋購物中心！', audioText: '到咗宏茂橋購物中心！' },
     ],
   },
+  teo: {
+    A: [
+      { text: '從B出口行出去。搵頭頂彼个藍色地鐵標誌。', audioText: '從B出口行出去。搵藍色標誌。' },
+      { text: '行到看著黃色POSB提款機。佇彼拐倒爿。', audioText: '行到黃色提款機，拐倒爿。' },
+      { text: '佇交通燈過馬路。紅色巴士站佇對面。', audioText: '佇交通燈過馬路。巴士站佇對面。' },
+      { text: '到咯！勿洛轉車站！', audioText: '到咯！勿洛轉車站！' },
+    ],
+    B: [
+      { text: '從A出口行出去。搵頭頂彼个綠色地鐵標誌。', audioText: '從A出口行出去。' },
+      { text: '行直去。正爿會看著紅色郵箱。', audioText: '行直去。正爿有紅色郵箱。' },
+      { text: '到咯！淡濱尼商場！從大玻璃門行入去。', audioText: '到咯！淡濱尼商場！' },
+    ],
+    C: [
+      { text: '從C出口行出去。搵頭頂彼个橙色標誌。', audioText: '從C出口行出去。' },
+      { text: '行過Kopitiam咖啡店了後拐正爿。', audioText: '過咖啡店了後拐正爿。' },
+      { text: '到咯！宏茂橋購物中心！', audioText: '到咯！宏茂橋購物中心！' },
+    ],
+  },
   zh: {
     A: [
       { text: '从B出口出去。找头顶的蓝色地铁标志。', audioText: '从B出口出去。找蓝色地铁标志。' },
