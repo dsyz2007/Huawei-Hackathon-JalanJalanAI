@@ -1,0 +1,46 @@
+Firstly, add:
+
+'''
+server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:5000', // Flask server URL
+        changeOrigin: true,
+      }
+    }
+  }
+'''
+
+into vite.config.ts so as to locate the server when it is running.
+Then, in order to call a backend function using TSX, fetch() will be used:
+
+'''
+async function Example(){
+    const response = await fetch('/api/data');
+    const flaskData = await response.json();
+}
+'''
+
+where '/api/data' is the directory of the flask function.
+PS: Function must be async for await to work.
+If a backend function requires a parameter to be inserted, use:
+
+'''
+const response = await fetch('/api/data', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+
+  body: JSON.stringify({ parameters }),
+});
+'''
+
+btw parameter names are saved when using JSON.stringify(), 
+so pls follow documentation for the function and what to pass through.
+
+The example app in example_website can be referenced to understand how API calls
+are done inbetween Vite and Flask.
+
+Let me know if there are any clarifications needed.
