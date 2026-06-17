@@ -26,6 +26,8 @@ export interface Translations {
   imOk: string;
   needHelp: string;
   actions: Record<string, string>;
+  demoRoutes: { A: string; B: string; C: string };
+  errorGenerating: string;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -62,6 +64,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: 'Cross Road',
       arrive: 'Arrive',
     },
+    demoRoutes: {
+      A: 'Bedok MRT → Bedok Interchange',
+      B: 'Tampines MRT → Tampines Mall',
+      C: 'Ang Mo Kio MRT → AMK Hub',
+    },
+    errorGenerating: 'Failed to generate route. Please try again.',
   },
   singlish: {
     appName: 'JalanJalan AI',
@@ -96,6 +104,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: 'Cross Road',
       arrive: 'Reached liao',
     },
+    demoRoutes: {
+      A: 'Bedok MRT → Bedok Interchange lor',
+      B: 'Tampines MRT → Tampines Mall lah',
+      C: 'Ang Mo Kio MRT → AMK Hub lor',
+    },
+    errorGenerating: 'Aiyah, cannot generate route leh. Try again lah!',
   },
   yue: {
     appName: 'JalanJalan AI',
@@ -130,6 +144,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: '過馬路',
       arrive: '到達',
     },
+    demoRoutes: {
+      A: '勿洛地鐵站 → 勿洛轉車站',
+      B: '淡濱尼地鐵站 → 淡濱尼商場',
+      C: '宏茂橋地鐵站 → 宏茂橋購物中心',
+    },
+    errorGenerating: '搵唔到路線，請再試。',
   },
   zh: {
     appName: 'JalanJalan AI',
@@ -164,6 +184,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: '过马路',
       arrive: '到达',
     },
+    demoRoutes: {
+      A: '勿洛地铁站 → 勿洛转换站',
+      B: '淡滨尼地铁站 → 淡滨尼购物中心',
+      C: '宏茂桥地铁站 → 宏茂桥购物中心',
+    },
+    errorGenerating: '无法生成路线，请重试。',
   },
   ms: {
     appName: 'JalanJalan AI',
@@ -198,6 +224,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: 'Seberangi Jalan',
       arrive: 'Tiba',
     },
+    demoRoutes: {
+      A: 'Stesen MRT Bedok → Pusat Pertukaran Bedok',
+      B: 'Stesen MRT Tampines → Pusat Membeli-belah Tampines',
+      C: 'Stesen MRT Ang Mo Kio → AMK Hub',
+    },
+    errorGenerating: 'Laluan tidak dapat dijana. Sila cuba lagi.',
   },
   ta: {
     appName: 'JalanJalan AI',
@@ -232,6 +264,12 @@ export const translations: Record<Language, Translations> = {
       cross_road: 'சாலை கடந்து செல்',
       arrive: 'வந்துவிட்டீர்கள்',
     },
+    demoRoutes: {
+      A: 'பேடோக் MRT → பேடோக் இடைமாற்று',
+      B: 'தம்பினேஸ் MRT → தம்பினேஸ் மால்',
+      C: 'அங் மோ கியோ MRT → AMK Hub',
+    },
+    errorGenerating: 'பாதை உருவாக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.',
   },
   hi: {
     appName: 'JalanJalan AI',
@@ -266,5 +304,11 @@ export const translations: Record<Language, Translations> = {
       cross_road: 'सड़क पार करें',
       arrive: 'पहुंच गए',
     },
+    demoRoutes: {
+      A: 'बेडोक MRT → बेडोक इंटरचेंज',
+      B: 'टैम्पाइन्स MRT → टैम्पाइन्स मॉल',
+      C: 'अंग मो कियो MRT → AMK Hub',
+    },
+    errorGenerating: 'रास्ता नहीं बना। कृपया दोबारा कोशिश करें।',
   },
 };
