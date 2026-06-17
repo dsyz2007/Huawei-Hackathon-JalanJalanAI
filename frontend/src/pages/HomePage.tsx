@@ -76,7 +76,7 @@ export function HomePage() {
         <span style={{ fontSize: 15 }}>{t.preferShelter}</span>
       </label>
 
-      {error && <p style={{ color: '#ef4444', marginBottom: 12 }}>{error}</p>}
+      {error && <p style={{ color: '#ef4444', marginBottom: 12 }}>{t.errorGenerating}</p>}
 
       <button
         onClick={handleGenerate}
@@ -101,7 +101,7 @@ export function HomePage() {
             onClick={() => handleDemo(id)}
             style={{ ...btnStyle('#f1f5f9'), color: '#374151', fontSize: 14 }}
           >
-            {DEMO_ROUTES[id].label}
+            {t.demoRoutes[id]}
           </button>
         ))}
       </div>
