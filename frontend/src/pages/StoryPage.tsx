@@ -42,7 +42,7 @@ export function StoryPage() {
         >
           {t.routeOverview}
         </button>
-        <ProgressTracker current={currentStep + 1} total={route.steps.length} />
+        <ProgressTracker current={currentStep + 1} total={route.steps.length} stepName={step?.landmark?.name} />
       </div>
 
       <div style={{ flex: 1, padding: '8px 16px 24px' }}>
