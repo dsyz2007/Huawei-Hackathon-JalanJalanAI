@@ -3,17 +3,23 @@ import { useLanguage } from '../context/LanguageContext';
 interface Props {
   current: number;
   total: number;
+  stepName?: string;
 }
 
-export function ProgressTracker({ current, total }: Props) {
+export function ProgressTracker({ current, total, stepName }: Props) {
   const { t } = useLanguage();
   const percent = total > 0 ? Math.round((current / total) * 100) : 0;
 
   return (
     <div style={{ textAlign: 'center', padding: '8px 16px' }}>
-      <p style={{ fontSize: 18, fontWeight: 600, margin: '0 0 6px' }}>
+      <p style={{ fontSize: 18, fontWeight: 600, margin: '0 0 2px' }}>
         {t.stepOf(current, total)}
       </p>
+      {stepName && (
+        <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 6px' }}>
+          {stepName}
+        </p>
+      )}
       <div
         role="progressbar"
         aria-valuenow={current}

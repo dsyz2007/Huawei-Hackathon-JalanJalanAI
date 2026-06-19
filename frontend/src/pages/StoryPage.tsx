@@ -32,7 +32,7 @@ export function StoryPage() {
 
   return (
     <div
-      style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}
+      style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', minHeight: '100dvh', display: 'flex', flexDirection: 'column', userSelect: 'none', touchAction: 'none' }}
       {...swipeHandlers}
     >
       <div style={{ padding: '16px 20px 8px' }}>
@@ -42,7 +42,7 @@ export function StoryPage() {
         >
           {t.routeOverview}
         </button>
-        <ProgressTracker current={currentStep + 1} total={route.steps.length} />
+        <ProgressTracker current={currentStep + 1} total={route.steps.length} stepName={step?.landmark?.name} />
       </div>
 
       <div style={{ flex: 1, padding: '8px 16px 24px' }}>
