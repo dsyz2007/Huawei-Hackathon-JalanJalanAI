@@ -66,7 +66,7 @@ export function StoryCard({ step, language }: Props) {
         </p>
 
         <AudioPlayer
-          text={instruction?.audioText ?? instruction?.text ?? checkpoint.action}
+          text={instruction?.text ?? checkpoint.action.replace(/_/g, ' ')}
           language={language}
         />
       </div>
