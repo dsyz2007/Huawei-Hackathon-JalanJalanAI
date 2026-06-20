@@ -1,4 +1,5 @@
 import { useSpeech } from '../hooks/useSpeech';
+import { useLanguage } from '../context/LanguageContext';
 import type { Language } from '../types';
 
 interface Props {
@@ -8,25 +9,26 @@ interface Props {
 
 export function AudioPlayer({ text, language }: Props) {
   const { speaking, paused, speak, pause, resume, stop } = useSpeech();
+  const { t } = useLanguage();
 
   return (
     <div style={{ display: 'flex', gap: 10, justifyContent: 'center', padding: '12px 0' }}>
       {!speaking ? (
         <button onClick={() => speak(text, language)} style={btnStyle('#2563eb')}>
-          ▶ Play
+          ▶ {t.play}
         </button>
       ) : paused ? (
         <button onClick={resume} style={btnStyle('#2563eb')}>
-          ▶ Resume
+          ▶ {t.resume}
         </button>
       ) : (
         <button onClick={pause} style={btnStyle('#f59e0b')}>
-          ⏸ Pause
+          ⏸ {t.pause}
         </button>
       )}
       {speaking && (
         <button onClick={stop} style={btnStyle('#ef4444')}>
-          ■ Stop
+          ■ {t.stop}
         </button>
       )}
     </div>

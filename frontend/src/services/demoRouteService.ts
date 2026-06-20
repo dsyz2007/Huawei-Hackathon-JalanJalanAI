@@ -1,4 +1,5 @@
 import { api } from './api';
+import { translations } from '../i18n';
 import type { RouteResponse, Language } from '../types';
 
 export type DemoRouteId = 'A' | 'B' | 'C';
@@ -159,16 +160,22 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
   },
 };
 
+const LANDMARK_KEYS: Record<DemoRouteId, string[]> = {
+  A: ['bedokMrtExitB', 'posbAtm', 'redBusStop', 'bedokInterchange'],
+  B: ['tampinesMrtExitA', 'tampinesPostOffice', 'tampinesMallEntrance'],
+  C: ['angMoKioMrtExitC', 'kopitiamCoffeeShop', 'amkHubEntrance'],
+};
+
 const BASE_ROUTES: Record<DemoRouteId, Omit<RouteResponse, 'steps'> & { steps: Omit<RouteResponse['steps'][number], 'instruction'>[] }> = {
   A: {
     routeId: 'demo-A',
     distance: '650m',
     duration: '8 mins',
     steps: [
-      { step: 1, checkpoint: { id: 'A1', action: 'exit_mrt', lat: 1.3236, lng: 103.9300, distance: 0 }, landmark: { name: 'Bedok MRT Exit B', description: 'Blue MRT sign above the exit' } },
-      { step: 2, checkpoint: { id: 'A2', action: 'turn_left', lat: 1.3240, lng: 103.9305, distance: 80 }, landmark: { name: 'POSB ATM', description: 'Yellow ATM machine on the corner' } },
-      { step: 3, checkpoint: { id: 'A3', action: 'cross_road', lat: 1.3245, lng: 103.9310, distance: 200 }, landmark: { name: 'Red Bus Stop', description: 'Red roof bus stop with a shelter' } },
-      { step: 4, checkpoint: { id: 'A4', action: 'arrive', lat: 1.3250, lng: 103.9315, distance: 400 }, landmark: { name: 'Bedok Interchange', description: 'Large covered bus interchange' } },
+      { step: 1, checkpoint: { id: 'A1', action: 'exit_mrt', lat: 1.3236, lng: 103.9300, distance: 0 }, landmark: { name: '', description: '' } },
+      { step: 2, checkpoint: { id: 'A2', action: 'turn_left', lat: 1.3240, lng: 103.9305, distance: 80 }, landmark: { name: '', description: '' } },
+      { step: 3, checkpoint: { id: 'A3', action: 'cross_road', lat: 1.3245, lng: 103.9310, distance: 200 }, landmark: { name: '', description: '' } },
+      { step: 4, checkpoint: { id: 'A4', action: 'arrive', lat: 1.3250, lng: 103.9315, distance: 400 }, landmark: { name: '', description: '' } },
     ],
   },
   B: {
@@ -176,9 +183,9 @@ const BASE_ROUTES: Record<DemoRouteId, Omit<RouteResponse, 'steps'> & { steps: O
     distance: '400m',
     duration: '5 mins',
     steps: [
-      { step: 1, checkpoint: { id: 'B1', action: 'exit_mrt', lat: 1.3527, lng: 103.9451, distance: 0 }, landmark: { name: 'Tampines MRT Exit A', description: 'Green MRT sign above the exit' } },
-      { step: 2, checkpoint: { id: 'B2', action: 'go_straight', lat: 1.3530, lng: 103.9455, distance: 100 }, landmark: { name: 'Tampines Central Post Office', description: 'Red post box outside a building' } },
-      { step: 3, checkpoint: { id: 'B3', action: 'arrive', lat: 1.3533, lng: 103.9458, distance: 250 }, landmark: { name: 'Tampines Mall Entrance', description: 'Big glass doors with a mall sign' } },
+      { step: 1, checkpoint: { id: 'B1', action: 'exit_mrt', lat: 1.3527, lng: 103.9451, distance: 0 }, landmark: { name: '', description: '' } },
+      { step: 2, checkpoint: { id: 'B2', action: 'go_straight', lat: 1.3530, lng: 103.9455, distance: 100 }, landmark: { name: '', description: '' } },
+      { step: 3, checkpoint: { id: 'B3', action: 'arrive', lat: 1.3533, lng: 103.9458, distance: 250 }, landmark: { name: '', description: '' } },
     ],
   },
   C: {
@@ -186,9 +193,9 @@ const BASE_ROUTES: Record<DemoRouteId, Omit<RouteResponse, 'steps'> & { steps: O
     distance: '300m',
     duration: '4 mins',
     steps: [
-      { step: 1, checkpoint: { id: 'C1', action: 'exit_mrt', lat: 1.3699, lng: 103.8492, distance: 0 }, landmark: { name: 'Ang Mo Kio MRT Exit C', description: 'Orange MRT sign above the exit' } },
-      { step: 2, checkpoint: { id: 'C2', action: 'turn_right', lat: 1.3702, lng: 103.8495, distance: 80 }, landmark: { name: 'Kopitiam Coffee Shop', description: 'Open-air coffee shop with yellow signboard' } },
-      { step: 3, checkpoint: { id: 'C3', action: 'arrive', lat: 1.3705, lng: 103.8498, distance: 200 }, landmark: { name: 'AMK Hub Entrance', description: 'Large shopping mall entrance' } },
+      { step: 1, checkpoint: { id: 'C1', action: 'exit_mrt', lat: 1.3699, lng: 103.8492, distance: 0 }, landmark: { name: '', description: '' } },
+      { step: 2, checkpoint: { id: 'C2', action: 'turn_right', lat: 1.3702, lng: 103.8495, distance: 80 }, landmark: { name: '', description: '' } },
+      { step: 3, checkpoint: { id: 'C3', action: 'arrive', lat: 1.3705, lng: 103.8498, distance: 200 }, landmark: { name: '', description: '' } },
     ],
   },
 };
@@ -196,10 +203,15 @@ const BASE_ROUTES: Record<DemoRouteId, Omit<RouteResponse, 'steps'> & { steps: O
 function buildRoute(id: DemoRouteId, language: Language): RouteResponse {
   const base = BASE_ROUTES[id];
   const instructions = INSTRUCTIONS[language][id];
+  const landmarkKeys = LANDMARK_KEYS[id];
+  const landmarkTranslations = translations[language].landmarks;
   return {
     ...base,
     steps: base.steps.map((step, i) => ({
       ...step,
+      landmark: step.landmark
+        ? { ...step.landmark, ...landmarkTranslations[landmarkKeys[i]] }
+        : step.landmark,
       instruction: {
         text: instructions[i].text,
         audioText: instructions[i].audioText,
