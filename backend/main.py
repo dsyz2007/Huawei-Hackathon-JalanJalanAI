@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -11,6 +12,15 @@ from backend.src.models import (
 
 
 app = FastAPI(title = "JalanJalan AI")
+
+#add CORS (Cross-Origin Resource Sharing) to allow frontend and backend to link and call each other
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], #the list of origins permitted to call you (5173 is Vite's default dev-server port, list both localhost and 127.0.0.1 as they count as diff origins)
+    allow_credentials=True, #Permit cookies/auth headers to ride along
+    allow_methods=["*"], # '*' allow all HTTP methods (e.g. GET, POST, OPTIONS, ...)
+    allow_headers=["*"], # '*' allow all request headers (e.g. Content-Type)
+)
 
 @app.get('/health')
 def health():
