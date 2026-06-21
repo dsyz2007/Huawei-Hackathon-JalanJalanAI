@@ -1,0 +1,2 @@
+[console_scripts]
+osm2geojson = osm2geojson.__main__:main

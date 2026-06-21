@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.src import demo_data
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -8,6 +9,7 @@ from backend.src.models import (
     Checkpoint,
     Landmark,
     Instruction,
+    DemoRouteRequest
 )
 
 
@@ -19,7 +21,7 @@ app.add_middleware(
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], #the list of origins permitted to call you (5173 is Vite's default dev-server port, list both localhost and 127.0.0.1 as they count as diff origins)
     allow_credentials=True, #Permit cookies/auth headers to ride along
     allow_methods=["*"], # '*' allow all HTTP methods (e.g. GET, POST, OPTIONS, ...)
-    allow_headers=["*"], # '*' allow all request headers (e.g. Content-Type)
+    allow_headers=["*"] # '*' allow all request headers (e.g. Content-Type)
 )
 
 @app.get('/health')
@@ -45,8 +47,14 @@ def route(req: RouteRequest):
                 instruction=Instruction(
                     text = f"Exit at {req.origin}.",
                     audio_text = "Exit here.",
-                    language = req.language,
-                ),
+                    language = req.language
+                )
             )
-        ],
+        ]
     )
+
+
+@app.post('/demo-route', response_model=RouteResponse)
+def demo_route(req: DemoRouteRequest):
+    return demo_data.get_demo_route(req.id, req.language)
+
