@@ -2,22 +2,24 @@ import { useState, useCallback, useRef } from 'react';
 import type { Language } from '../types';
 
 const LANG_BCP47: Record<Language, string[]> = {
-  en:       ['en-SG', 'en-GB', 'en-US'],
+  english:  ['en-SG', 'en-GB', 'en-US'],
   singlish: ['en-SG', 'en-GB', 'en-US'],
-  yue:      ['zh-HK', 'zh-TW'],
-  teo:      ['zh-TW', 'zh-CN'],
-  zh:       ['zh-CN', 'zh-TW'],
-  ms:       ['ms-MY', 'ms'],
-  ta:       ['ta-SG', 'ta-IN', 'ta'],
-  hi:       ['hi-IN', 'hi'],
+  cantonese: ['zh-HK', 'zh-TW'],
+  teochew:  ['zh-TW', 'zh-CN'],
+  hokkien:  ['nan', 'zh-TW'],
+  chinese:  ['zh-CN', 'zh-TW'],
+  malay:    ['ms-MY', 'ms'],
+  tamil:    ['ta-SG', 'ta-IN', 'ta'],
+  hindi:    ['hi-IN', 'hi'],
 };
 
 const LANG_RATE: Partial<Record<Language, number>> = {
-  ms: 0.78,
-  ta: 0.80,
-  hi: 0.82,
-  yue: 0.82,
-  teo: 0.82,
+  malay:    0.78,
+  tamil:    0.80,
+  hindi:    0.82,
+  cantonese: 0.82,
+  teochew:  0.82,
+  hokkien:  0.82,
 };
 
 const COMMA_PAUSE_MS = 200;

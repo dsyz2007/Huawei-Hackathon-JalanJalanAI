@@ -14,7 +14,7 @@ type Instructions = { text: string; audioText: string };
 type RouteInstructions = Record<DemoRouteId, Instructions[]>;
 
 const INSTRUCTIONS: Record<Language, RouteInstructions> = {
-  en: {
+  english: {
     A: [
       { text: 'Exit through Exit B. Look for the blue MRT sign above you.', audioText: 'Exit through Exit B. Look for the blue sign above you.' },
       { text: 'Walk until you see the yellow POSB ATM. Turn left there.', audioText: 'Walk to the yellow ATM. Turn left there.' },
@@ -50,7 +50,7 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: 'Reached liao! AMK Hub!', audioText: 'Reached AMK Hub!' },
     ],
   },
-  yue: {
+  cantonese: {
     A: [
       { text: '由B出口出去。搵頭頂嗰個藍色地鐵標誌。', audioText: '由B出口出去。搵藍色地鐵標誌。' },
       { text: '行到見到黃色POSB提款機。喺嗰度向左轉。', audioText: '行到黃色提款機，向左轉。' },
@@ -68,7 +68,7 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: '到咗喇！宏茂橋購物中心！', audioText: '到咗宏茂橋購物中心！' },
     ],
   },
-  teo: {
+  teochew: {
     A: [
       { text: '從B出口行出去。搵頭頂彼个藍色地鐵標誌。', audioText: '從B出口行出去。搵藍色標誌。' },
       { text: '行到看著黃色POSB提款機。佇彼拐倒爿。', audioText: '行到黃色提款機，拐倒爿。' },
@@ -86,7 +86,25 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: '到咯！宏茂橋購物中心！', audioText: '到咯！宏茂橋購物中心！' },
     ],
   },
-  zh: {
+  hokkien: {
+    A: [
+      { text: '從B出口行出去。搵頂懸彼个藍色捷運標誌。', audioText: '從B出口行出去。搵藍色標誌。' },
+      { text: '行到看著黃色POSB提款機。佇彼轉向倒爿。', audioText: '行到黃色提款機，轉向倒爿。' },
+      { text: '佇交通燈過馬路。紅色公車站佇對面。', audioText: '佇交通燈過馬路。公車站佇對面。' },
+      { text: '到矣！勿洛轉車站！', audioText: '到矣！勿洛轉車站！' },
+    ],
+    B: [
+      { text: '從A出口行出去。搵頂懸彼个綠色捷運標誌。', audioText: '從A出口行出去。' },
+      { text: '行直去。正爿會看著紅色郵箱。', audioText: '行直去。正爿有紅色郵箱。' },
+      { text: '到矣！淡濱尼商場！從大玻璃門行入去。', audioText: '到矣！淡濱尼商場！' },
+    ],
+    C: [
+      { text: '從C出口行出去。搵頂懸彼个橙色標誌。', audioText: '從C出口行出去。' },
+      { text: '行過Kopitiam咖啡店了後轉向正爿。', audioText: '過咖啡店了後轉向正爿。' },
+      { text: '到矣！宏茂橋購物中心！', audioText: '到矣！宏茂橋購物中心！' },
+    ],
+  },
+  chinese: {
     A: [
       { text: '从B出口出去。找头顶的蓝色地铁标志。', audioText: '从B出口出去。找蓝色地铁标志。' },
       { text: '走到看见黄色POSB ATM机。在那里向左转。', audioText: '走到黄色ATM机，向左转。' },
@@ -104,7 +122,7 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: '您已到达宏茂桥购物中心！', audioText: '您已到达宏茂桥购物中心！' },
     ],
   },
-  ms: {
+  malay: {
     A: [
       { text: 'Keluar melalui Pintu Keluar B. Cari papan tanda MRT biru di atas.', audioText: 'Keluar melalui Pintu Keluar B. Cari tanda biru di atas.' },
       { text: 'Jalan sehingga nampak ATM POSB kuning. Belok kiri di sana.', audioText: 'Jalan ke ATM kuning. Belok kiri di sana.' },
@@ -122,7 +140,7 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: 'Anda telah tiba di AMK Hub!', audioText: 'Anda telah tiba di AMK Hub!' },
     ],
   },
-  ta: {
+  tamil: {
     A: [
       { text: 'B வெளியேற்று வழியாக வெளியேறுங்கள். மேலே நீல MRT அடையாளத்தை தேடுங்கள்.', audioText: 'B வழியாக வெளியேறுங்கள். நீல அடையாளம் தேடுங்கள்.' },
       { text: 'மஞ்சள் POSB ATM தெரியும் வரை நடங்கள். அங்கே இடது திரும்புங்கள்.', audioText: 'மஞ்சள் ATM வரை நடங்கள். இடது திரும்புங்கள்.' },
@@ -140,7 +158,7 @@ const INSTRUCTIONS: Record<Language, RouteInstructions> = {
       { text: 'நீங்கள் AMK Hub ஐ அடைந்துவிட்டீர்கள்!', audioText: 'நீங்கள் AMK Hub ஐ அடைந்துவிட்டீர்கள்!' },
     ],
   },
-  hi: {
+  hindi: {
     A: [
       { text: 'निकास B से बाहर निकलें। ऊपर नीले MRT संकेत को देखें।', audioText: 'निकास B से निकलें। नीला संकेत देखें।' },
       { text: 'पीले POSB ATM तक चलें। वहाँ बाएं मुड़ें।', audioText: 'पीले ATM तक चलें। बाएं मुड़ें।' },

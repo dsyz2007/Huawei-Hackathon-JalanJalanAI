@@ -6,14 +6,15 @@ import { useLanguage } from '../context/LanguageContext';
 import type { Language } from '../types';
 
 const LANGUAGES: { value: Language; label: string }[] = [
-  { value: 'en', label: 'English' },
+  { value: 'english', label: 'English' },
   { value: 'singlish', label: 'Singlish' },
-  { value: 'yue', label: '廣東話' },
-  { value: 'teo', label: '潮州話' },
-  { value: 'zh', label: '中文' },
-  { value: 'ms', label: 'Melayu' },
-  { value: 'ta', label: 'தமிழ்' },
-  { value: 'hi', label: 'हिन्दी' },
+  { value: 'cantonese', label: '廣東話' },
+  { value: 'teochew', label: '潮州話' },
+  { value: 'hokkien', label: '福建話' },
+  { value: 'chinese', label: '中文' },
+  { value: 'malay', label: 'Melayu' },
+  { value: 'tamil', label: 'தமிழ்' },
+  { value: 'hindi', label: 'हिन्दी' },
 ];
 
 export function HomePage() {

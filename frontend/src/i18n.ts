@@ -36,7 +36,7 @@ export interface Translations {
 }
 
 export const translations: Record<Language, Translations> = {
-  en: {
+  english: {
     appName: 'JalanJalan AI',
     tagline: 'Simple navigation for everyone',
     startingFrom: 'Starting from',
@@ -148,7 +148,7 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: 'AMK Hub Entrance', description: 'Big shopping mall entrance lor' },
     },
   },
-  yue: {
+  cantonese: {
     appName: 'JalanJalan AI',
     tagline: '人人都可以輕鬆導航',
     startingFrom: '由邊度出發',
@@ -204,7 +204,7 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: '宏茂橋購物中心入口', description: '大型購物商場入口' },
     },
   },
-  teo: {
+  teochew: {
     appName: 'JalanJalan AI',
     tagline: '大家攏會用个導航',
     startingFrom: '從底搭出發',
@@ -260,7 +260,63 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: '宏茂橋購物中心入口', description: '大型購物商場入口' },
     },
   },
-  zh: {
+  hokkien: {
+    appName: 'JalanJalan AI',
+    tagline: '逐家攏會使用个導航',
+    startingFrom: '從佗位出發',
+    goingTo: '去佗位',
+    language: '語言',
+    originPlaceholder: '親像：勿洛捷運站',
+    destinationPlaceholder: '親像：勿洛轉車站',
+    preferShelter: '揀有遮个路線',
+    generating: '咧揣路...',
+    generateRoute: '揣路線',
+    tryDemo: '— 抑是試看覓示範 —',
+    back: '← 轉去',
+    yourRoute: '汝个路線',
+    startNavigation: '開始導航',
+    routeOverview: '← 路線概覽',
+    previous: '← 頂一个',
+    arrived: '到矣！',
+    next: '下一个 →',
+    lostHelp: '請叫人來幫汝，抑是問附近个人。',
+    stepOf: (current, total) => `第 ${current} 步，共 ${total} 步`,
+    areYouLost: '汝迷路矣？',
+    nextCheckpoint: (meters) => `下一个站距離 ${meters} 公尺。`,
+    imOk: '我無問題',
+    needHelp: '需要幫助',
+    actions: {
+      exit_mrt: '行出捷運站',
+      turn_left: '轉向倒爿',
+      turn_right: '轉向正爿',
+      go_straight: '行直去',
+      cross_road: '過馬路',
+      arrive: '到矣',
+    },
+    demoRoutes: {
+      A: '勿洛捷運站 → 勿洛轉車站',
+      B: '淡濱尼捷運站 → 淡濱尼商場',
+      C: '宏茂橋捷運站 → 宏茂橋購物中心',
+    },
+    errorGenerating: '揣無路線，請閣再試。',
+    play: '播放',
+    pause: '暫停',
+    resume: '繼續',
+    stop: '停止',
+    landmarks: {
+      bedokMrtExitB: { name: '勿洛捷運站B出口', description: '出口頂懸有藍色捷運標誌' },
+      posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
+      redBusStop: { name: '紅色公車站', description: '有紅色頂篷个公車站' },
+      bedokInterchange: { name: '勿洛轉車站', description: '有頂篷个大型轉車站' },
+      tampinesMrtExitA: { name: '淡濱尼捷運站A出口', description: '出口頂懸有綠色捷運標誌' },
+      tampinesPostOffice: { name: '淡濱尼中央郵局', description: '建築物外有紅色郵箱' },
+      tampinesMallEntrance: { name: '淡濱尼商場入口', description: '有商場牌个大玻璃門' },
+      angMoKioMrtExitC: { name: '宏茂橋捷運站C出口', description: '出口頂懸有橙色標誌' },
+      kopitiamCoffeeShop: { name: 'Kopitiam咖啡店', description: '有黃色招牌个露天咖啡店' },
+      amkHubEntrance: { name: '宏茂橋購物中心入口', description: '大型購物商場入口' },
+    },
+  },
+  chinese: {
     appName: 'JalanJalan AI',
     tagline: '为每个人提供简单导航',
     startingFrom: '出发地',
@@ -316,7 +372,7 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: '宏茂桥购物中心入口', description: '大型购物商场入口' },
     },
   },
-  ms: {
+  malay: {
     appName: 'JalanJalan AI',
     tagline: 'Navigasi mudah untuk semua',
     startingFrom: 'Bermula dari',
@@ -372,7 +428,7 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: 'Pintu Masuk AMK Hub', description: 'Pintu masuk pusat membeli-belah besar' },
     },
   },
-  ta: {
+  tamil: {
     appName: 'JalanJalan AI',
     tagline: 'அனைவருக்கும் எளிய வழிசெலுத்தல்',
     startingFrom: 'தொடங்கும் இடம்',
@@ -428,7 +484,7 @@ export const translations: Record<Language, Translations> = {
       amkHubEntrance: { name: 'AMK Hub நுழைவாயில்', description: 'பெரிய வணிக மையம் நுழைவாயில்' },
     },
   },
-  hi: {
+  hindi: {
     appName: 'JalanJalan AI',
     tagline: 'सबके लिए सरल नेविगेशन',
     startingFrom: 'कहाँ से',

@@ -1,4 +1,4 @@
-export type Language = 'en' | 'singlish' | 'yue' | 'teo' | 'zh' | 'ms' | 'ta' | 'hi';
+export type Language = 'english' | 'singlish' | 'cantonese' | 'teochew' | 'hokkien' | 'chinese' | 'malay' | 'tamil' | 'hindi';
 
 export interface Checkpoint {
   id: string;
