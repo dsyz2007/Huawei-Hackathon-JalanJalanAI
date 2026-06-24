@@ -14,7 +14,7 @@ import type { RouteResponse } from '../types';
 
 const EMERGENCY_CONTACT = '+6598765432';
 const NO_MOVEMENT_MS = 60_000;
-const WRONG_DIR_MS = 45_000;
+const WRONG_DIR_THRESHOLD_M = 100;
 const SNOOZE_MS = 5 * 60_000;
 
 interface LocationState {
@@ -43,7 +43,7 @@ export function StoryPage() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [helpMessage, setHelpMessage] = useState<string | null>(null);
   const lastMovedRef = useRef<{ lat: number; lng: number; time: number } | null>(null);
-  const wrongDirSinceRef = useRef<number | null>(null);
+  const minDistToCheckpointRef = useRef<number | null>(null);
   const helpSnoozedUntilRef = useRef(0);
 
   const totalSteps = state?.route?.steps?.length ?? 0;
@@ -60,6 +60,7 @@ export function StoryPage() {
 
   useEffect(() => {
     autoAdvanced.current = false;
+    minDistToCheckpointRef.current = null;
   }, [currentStep]);
 
   useEffect(() => {
@@ -94,20 +95,17 @@ export function StoryPage() {
   }, [position, t.noMovementAlert]);
 
   useEffect(() => {
-    if (bearing === null || heading === null || Date.now() < helpSnoozedUntilRef.current) return;
-    const diff = Math.abs(((bearing - heading + 540) % 360) - 180);
-    const now = Date.now();
-    if (diff > 135) {
-      if (!wrongDirSinceRef.current) wrongDirSinceRef.current = now;
-      else if (now - wrongDirSinceRef.current > WRONG_DIR_MS) {
-        setHelpMessage(t.wrongDirectionAlert);
-        helpSnoozedUntilRef.current = now + SNOOZE_MS;
-        wrongDirSinceRef.current = null;
-      }
-    } else {
-      wrongDirSinceRef.current = null;
+    if (distanceToCheckpoint === null || Date.now() < helpSnoozedUntilRef.current) return;
+    if (minDistToCheckpointRef.current === null || distanceToCheckpoint < minDistToCheckpointRef.current) {
+      minDistToCheckpointRef.current = distanceToCheckpoint;
+      return;
     }
-  }, [position, bearing, heading, t.wrongDirectionAlert]);
+    if (distanceToCheckpoint > minDistToCheckpointRef.current + WRONG_DIR_THRESHOLD_M) {
+      setHelpMessage(t.wrongDirectionAlert);
+      helpSnoozedUntilRef.current = Date.now() + SNOOZE_MS;
+      minDistToCheckpointRef.current = distanceToCheckpoint;
+    }
+  }, [distanceToCheckpoint, t.wrongDirectionAlert]);
 
   if (!state?.route) {
     navigate('/');
