@@ -25,6 +25,11 @@ export interface Translations {
   nextCheckpoint: (meters: number) => string;
   imOk: string;
   needHelp: string;
+  allSteps: string;
+  metersAway: (m: number) => string;
+  landmarkIs: (dir: string) => string;
+  directions: Record<string, string>;
+  audioTemplates: Record<string, (landmark?: string) => string>;
   actions: Record<string, string>;
   demoRoutes: { A: string; B: string; C: string };
   errorGenerating: string;
@@ -32,6 +37,7 @@ export interface Translations {
   pause: string;
   resume: string;
   stop: string;
+  voiceNotAvailable: string;
   landmarks: Record<string, { name: string; description: string }>;
 }
 
@@ -61,6 +67,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `Next checkpoint is ${meters}m away.`,
     imOk: "I'm OK",
     needHelp: 'Need Help',
+    allSteps: 'All Steps',
+    metersAway: (m) => `${m}m away`,
+    landmarkIs: (dir) => `Landmark is ${dir}`,
+    directions: { ahead: 'ahead of you', right: 'to your right', left: 'to your left', behind: 'behind you', north: 'to the north', south: 'to the south', east: 'to the east', west: 'to the west' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `Exit at ${l}.` : 'Please exit the MRT station.',
+      turn_left:   (l) => l ? `Turn left at ${l}.` : 'Please turn left.',
+      turn_right:  (l) => l ? `Turn right at ${l}.` : 'Please turn right.',
+      go_straight: (l) => l ? `Go straight ahead, past ${l}.` : 'Please go straight ahead.',
+      cross_road:  (l) => l ? `Cross the road at ${l}.` : 'Please cross the road carefully.',
+      arrive:      (l) => l ? `You have arrived at ${l}.` : 'You have arrived at your destination.',
+    },
     actions: {
       exit_mrt: 'Exit MRT',
       turn_left: 'Turn Left',
@@ -79,6 +97,7 @@ export const translations: Record<Language, Translations> = {
     pause: 'Pause',
     resume: 'Resume',
     stop: 'Stop',
+    voiceNotAvailable: 'Audio voice not available on this device. Please install English text-to-speech in your device settings for the best experience.',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B', description: 'Blue MRT sign above the exit' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine on the corner' },
@@ -117,6 +136,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `Next checkpoint ${meters}m away leh.`,
     imOk: 'OK lah',
     needHelp: 'Help me leh',
+    allSteps: 'All Steps lah',
+    metersAway: (m) => `${m}m only`,
+    landmarkIs: (dir) => `Landmark is ${dir}`,
+    directions: { ahead: 'right in front lah', right: 'on your right lah', left: 'on your left lah', behind: 'behind you leh', north: 'to the north', south: 'to the south', east: 'to the east', west: 'to the west' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `Exit at ${l} lah.` : 'Exit the MRT lah.',
+      turn_left:   (l) => l ? `Turn left at ${l} lah.` : 'Turn left lah.',
+      turn_right:  (l) => l ? `Turn right at ${l} lah.` : 'Turn right lah.',
+      go_straight: (l) => l ? `Go straight past ${l} lah.` : 'Go straight lah.',
+      cross_road:  (l) => l ? `Cross the road at ${l} lah.` : 'Cross road carefully lah.',
+      arrive:      (l) => l ? `Reached ${l} liao!` : 'Reached already liao!',
+    },
     actions: {
       exit_mrt: 'Exit MRT lor',
       turn_left: 'Turn Left lah',
@@ -135,6 +166,7 @@ export const translations: Record<Language, Translations> = {
     pause: 'Pause',
     resume: 'Resume',
     stop: 'Stop',
+    voiceNotAvailable: 'Audio not available leh. Go to your device settings and install English text-to-speech lah.',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B lor', description: 'Blue MRT sign up there, cannot miss one' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine at the corner lor' },
@@ -173,6 +205,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `下一個檢查點係 ${meters} 米外。`,
     imOk: '我OK㗎',
     needHelp: '我需要幫助',
+    allSteps: '所有步驟',
+    metersAway: (m) => `距離 ${m} 米`,
+    landmarkIs: (dir) => `地標${dir}`,
+    directions: { ahead: '喺你前面', right: '喺你右邊', left: '喺你左邊', behind: '喺你後面', north: '喺北面', south: '喺南面', east: '喺東面', west: '喺西面' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `請由${l}出去。` : '請由地鐵站出口出去。',
+      turn_left:   (l) => l ? `喺${l}向左轉。` : '請向左轉。',
+      turn_right:  (l) => l ? `喺${l}向右轉。` : '請向右轉。',
+      go_straight: (l) => l ? `經過${l}後繼續行直。` : '請繼續行直。',
+      cross_road:  (l) => l ? `喺${l}過馬路。` : '請小心過馬路。',
+      arrive:      (l) => l ? `你已到達${l}。` : '你已到達目的地。',
+    },
     actions: {
       exit_mrt: '出地鐵站',
       turn_left: '向左轉',
@@ -191,6 +235,7 @@ export const translations: Record<Language, Translations> = {
     pause: '暫停',
     resume: '繼續',
     stop: '停止',
+    voiceNotAvailable: '此裝置上沒有語音功能。請到裝置設定安裝廣東話文字轉語音以獲得最佳體驗。',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口上方有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角有黃色提款機' },
@@ -229,6 +274,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `下一個站距離 ${meters} 米。`,
     imOk: '我無問題',
     needHelp: '需要幫助',
+    allSteps: '所有步驟',
+    metersAway: (m) => `距離 ${m} 米`,
+    landmarkIs: (dir) => `目標${dir}`,
+    directions: { ahead: '佇汝前頭', right: '佇汝正手爿', left: '佇汝倒手爿', behind: '佇汝後頭', north: '佇北爿', south: '佇南爿', east: '佇東爿', west: '佇西爿' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `請由${l}出去。` : '請由地鐵站出口出去。',
+      turn_left:   (l) => l ? `佇${l}拐倒爿。` : '請拐倒爿。',
+      turn_right:  (l) => l ? `佇${l}拐正爿。` : '請拐正爿。',
+      go_straight: (l) => l ? `行過${l}了後繼續行直去。` : '請繼續行直去。',
+      cross_road:  (l) => l ? `佇${l}過馬路。` : '請細膩過馬路。',
+      arrive:      (l) => l ? `汝已到達${l}。` : '汝已到達目的地。',
+    },
     actions: {
       exit_mrt: '行出地鐵站',
       turn_left: '拐倒爿',
@@ -247,6 +304,7 @@ export const translations: Record<Language, Translations> = {
     pause: '暫停',
     resume: '繼續',
     stop: '停止',
+    voiceNotAvailable: '此裝置無語音功能。請到裝置設定安裝潮州話文字轉語音以獲得最佳體驗。',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口頂頭有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -285,6 +343,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `下一个站距離 ${meters} 公尺。`,
     imOk: '我無問題',
     needHelp: '需要幫助',
+    allSteps: '所有步驟',
+    metersAway: (m) => `距離 ${m} 公尺`,
+    landmarkIs: (dir) => `目標${dir}`,
+    directions: { ahead: '佇汝前頭', right: '佇汝正手爿', left: '佇汝倒手爿', behind: '佇汝後頭', north: '佇北爿', south: '佇南爿', east: '佇東爿', west: '佇西爿' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `請由${l}出去。` : '請由捷運站出口出去。',
+      turn_left:   (l) => l ? `佇${l}轉倒爿。` : '請轉倒爿。',
+      turn_right:  (l) => l ? `佇${l}轉正爿。` : '請轉正爿。',
+      go_straight: (l) => l ? `行過${l}了後繼續行直去。` : '請繼續行直去。',
+      cross_road:  (l) => l ? `佇${l}過馬路。` : '請細膩過馬路。',
+      arrive:      (l) => l ? `汝已到達${l}。` : '汝已到達目的地。',
+    },
     actions: {
       exit_mrt: '行出捷運站',
       turn_left: '轉向倒爿',
@@ -303,6 +373,7 @@ export const translations: Record<Language, Translations> = {
     pause: '暫停',
     resume: '繼續',
     stop: '停止',
+    voiceNotAvailable: '此裝置無語音功能。請到裝置設定安裝閩南語文字轉語音以獲得最佳體驗。',
     landmarks: {
       bedokMrtExitB: { name: '勿洛捷運站B出口', description: '出口頂懸有藍色捷運標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -341,6 +412,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `下一个检查点距离 ${meters} 米。`,
     imOk: '我没事',
     needHelp: '需要帮助',
+    allSteps: '所有步骤',
+    metersAway: (m) => `距离 ${m} 米`,
+    landmarkIs: (dir) => `地标${dir}`,
+    directions: { ahead: '在您前方', right: '在您右边', left: '在您左边', behind: '在您身后', north: '在北方', south: '在南方', east: '在东方', west: '在西方' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `请从${l}出去。` : '请从地铁站出口出去。',
+      turn_left:   (l) => l ? `在${l}处向左转。` : '请向左转。',
+      turn_right:  (l) => l ? `在${l}处向右转。` : '请向右转。',
+      go_straight: (l) => l ? `经过${l}后继续直行。` : '请继续直行。',
+      cross_road:  (l) => l ? `在${l}处过马路。` : '请小心过马路。',
+      arrive:      (l) => l ? `您已到达${l}。` : '您已到达目的地。',
+    },
     actions: {
       exit_mrt: '出地铁站',
       turn_left: '向左转',
@@ -359,6 +442,7 @@ export const translations: Record<Language, Translations> = {
     pause: '暂停',
     resume: '继续',
     stop: '停止',
+    voiceNotAvailable: '此设备上没有语音功能。请前往设备设置安装中文（简体）文字转语音以获得最佳体验。',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地铁站B出口', description: '出口上方有蓝色地铁标志' },
       posbAtm: { name: 'POSB ATM机', description: '街角有黄色ATM机' },
@@ -397,6 +481,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `Pos pemeriksaan seterusnya ${meters}m jauh.`,
     imOk: 'Saya OK',
     needHelp: 'Perlukan Bantuan',
+    allSteps: 'Semua Langkah',
+    metersAway: (m) => `${m}m lagi`,
+    landmarkIs: (dir) => `Mercu tanda ${dir}`,
+    directions: { ahead: 'di hadapan anda', right: 'di sebelah kanan', left: 'di sebelah kiri', behind: 'di belakang anda', north: 'ke utara', south: 'ke selatan', east: 'ke timur', west: 'ke barat' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `Sila keluar di ${l}.` : 'Sila keluar dari stesen MRT.',
+      turn_left:   (l) => l ? `Belok kiri di ${l}.` : 'Sila belok kiri.',
+      turn_right:  (l) => l ? `Belok kanan di ${l}.` : 'Sila belok kanan.',
+      go_straight: (l) => l ? `Jalan terus melepasi ${l}.` : 'Sila jalan terus.',
+      cross_road:  (l) => l ? `Seberangi jalan di ${l}.` : 'Sila seberangi jalan dengan berhati-hati.',
+      arrive:      (l) => l ? `Anda telah tiba di ${l}.` : 'Anda telah tiba di destinasi.',
+    },
     actions: {
       exit_mrt: 'Keluar MRT',
       turn_left: 'Belok Kiri',
@@ -415,6 +511,7 @@ export const translations: Record<Language, Translations> = {
     pause: 'Jeda',
     resume: 'Teruskan',
     stop: 'Berhenti',
+    voiceNotAvailable: 'Suara tidak tersedia pada peranti ini. Sila pergi ke tetapan peranti dan pasang text-to-speech Bahasa Melayu untuk pengalaman terbaik.',
     landmarks: {
       bedokMrtExitB: { name: 'Pintu Keluar B MRT Bedok', description: 'Tanda MRT biru di atas pintu keluar' },
       posbAtm: { name: 'ATM POSB', description: 'Mesin ATM kuning di sudut jalan' },
@@ -453,6 +550,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `அடுத்த சோதனை நிலையம் ${meters}மீ தொலைவில் உள்ளது.`,
     imOk: 'நான் சரியாக இருக்கிறேன்',
     needHelp: 'உதவி தேவை',
+    allSteps: 'அனைத்து படிகள்',
+    metersAway: (m) => `${m}மீ தொலைவில்`,
+    landmarkIs: (dir) => `அடையாளம் ${dir} உள்ளது`,
+    directions: { ahead: 'உங்கள் முன்னால்', right: 'உங்கள் வலது பக்கம்', left: 'உங்கள் இடது பக்கம்', behind: 'உங்கள் பின்னால்', north: 'வடக்கில்', south: 'தெற்கில்', east: 'கிழக்கில்', west: 'மேற்கில்' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `${l} இல் வெளியேறவும்.` : 'MRT நிலையத்திலிருந்து வெளியேறவும்.',
+      turn_left:   (l) => l ? `${l} இல் இடது பக்கம் திரும்பவும்.` : 'இடது பக்கம் திரும்பவும்.',
+      turn_right:  (l) => l ? `${l} இல் வலது பக்கம் திரும்பவும்.` : 'வலது பக்கம் திரும்பவும்.',
+      go_straight: (l) => l ? `${l} கடந்து நேராக தொடர்ந்து செல்லவும்.` : 'நேராக தொடர்ந்து செல்லவும்.',
+      cross_road:  (l) => l ? `${l} இல் சாலை கடந்து செல்லவும்.` : 'கவனமாக சாலை கடந்து செல்லவும்.',
+      arrive:      (l) => l ? `நீங்கள் ${l} வந்துவிட்டீர்கள்.` : 'நீங்கள் உங்கள் இலக்கை அடைந்துவிட்டீர்கள்.',
+    },
     actions: {
       exit_mrt: 'MRT வெளியேறு',
       turn_left: 'இடது திரும்பு',
@@ -471,6 +580,7 @@ export const translations: Record<Language, Translations> = {
     pause: 'இடைநிறுத்து',
     resume: 'தொடர்',
     stop: 'நிறுத்து',
+    voiceNotAvailable: 'இந்த சாதனத்தில் குரல் இல்லை. சிறந்த அனுபவத்திற்கு உங்கள் சாதன அமைப்புகளில் தமிழ் text-to-speech நிறுவுங்கள்.',
     landmarks: {
       bedokMrtExitB: { name: 'பேடோக் MRT வெளியேற்று B', description: 'வெளியேற்றுக்கு மேலே நீல MRT அடையாளம்' },
       posbAtm: { name: 'POSB ATM', description: 'மூலையில் மஞ்சள் ATM இயந்திரம்' },
@@ -509,6 +619,18 @@ export const translations: Record<Language, Translations> = {
     nextCheckpoint: (meters) => `अगला चेकपॉइंट ${meters} मीटर दूर है।`,
     imOk: 'मैं ठीक हूं',
     needHelp: 'मदद चाहिए',
+    allSteps: 'सभी चरण',
+    metersAway: (m) => `${m} मीटर दूर`,
+    landmarkIs: (dir) => `लैंडमार्क ${dir} है`,
+    directions: { ahead: 'आपके सामने', right: 'आपके दाईं ओर', left: 'आपके बाईं ओर', behind: 'आपके पीछे', north: 'उत्तर में', south: 'दक्षिण में', east: 'पूर्व में', west: 'पश्चिम में' },
+    audioTemplates: {
+      exit_mrt:    (l) => l ? `${l} पर बाहर निकलें।` : 'कृपया MRT स्टेशन से बाहर निकलें।',
+      turn_left:   (l) => l ? `${l} पर बाईं ओर मुड़ें।` : 'कृपया बाईं ओर मुड़ें।',
+      turn_right:  (l) => l ? `${l} पर दाईं ओर मुड़ें।` : 'कृपया दाईं ओर मुड़ें।',
+      go_straight: (l) => l ? `${l} के आगे सीधे चलते रहें।` : 'कृपया सीधे चलते रहें।',
+      cross_road:  (l) => l ? `${l} पर सड़क पार करें।` : 'कृपया सावधानी से सड़क पार करें।',
+      arrive:      (l) => l ? `आप ${l} पहुंच गए हैं।` : 'आप अपने गंतव्य पर पहुंच गए हैं।',
+    },
     actions: {
       exit_mrt: 'MRT से बाहर निकलें',
       turn_left: 'बाएं मुड़ें',
@@ -527,6 +649,7 @@ export const translations: Record<Language, Translations> = {
     pause: 'रोकें',
     resume: 'जारी रखें',
     stop: 'बंद करें',
+    voiceNotAvailable: 'इस डिवाइस पर आवाज़ उपलब्ध नहीं है। बेहतर अनुभव के लिए अपने डिवाइस सेटिंग में हिंदी text-to-speech इंस्टॉल करें।',
     landmarks: {
       bedokMrtExitB: { name: 'बेडोक MRT निकास B', description: 'निकास के ऊपर नीला MRT संकेत' },
       posbAtm: { name: 'POSB ATM', description: 'कोने पर पीला ATM मशीन' },

@@ -1,9 +1,13 @@
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { StoryCard } from '../components/StoryCard';
 import { ProgressTracker } from '../components/ProgressTracker';
 import { LostMode } from '../components/LostMode';
+import { StepPanel } from '../components/StepPanel';
 import { useStoryNavigation } from '../hooks/useStoryNavigation';
+import { useGPS } from '../hooks/useGPS';
 import { useLanguage } from '../context/LanguageContext';
+import { getTranslatedLandmark } from '../utils/landmarks';
 import type { RouteResponse } from '../types';
 
 interface LocationState {
@@ -11,10 +15,54 @@ interface LocationState {
   initialStep?: number;
 }
 
+function computeDirection(bearing: number, heading: number | null): string {
+  if (heading !== null && !isNaN(heading)) {
+    const rel = (bearing - heading + 360) % 360;
+    if (rel < 45 || rel >= 315) return 'ahead';
+    if (rel < 135) return 'right';
+    if (rel < 225) return 'behind';
+    return 'left';
+  }
+  if (bearing >= 315 || bearing < 45) return 'north';
+  if (bearing < 135) return 'east';
+  if (bearing < 225) return 'south';
+  return 'west';
+}
+
 export function StoryPage() {
   const { state } = useLocation() as { state: LocationState };
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  const totalSteps = state?.route?.steps?.length ?? 0;
+  const { currentStep, isFirst, isLast, next, previous, goTo, swipeHandlers } =
+    useStoryNavigation(totalSteps);
+
+  const step = state?.route?.steps?.[currentStep];
+  const checkpointTarget = step
+    ? { lat: step.checkpoint.lat, lng: step.checkpoint.lng }
+    : undefined;
+
+  const { position, distanceToCheckpoint, bearing, heading } = useGPS(checkpointTarget);
+  const autoAdvanced = useRef(false);
+
+  useEffect(() => {
+    autoAdvanced.current = false;
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (
+      distanceToCheckpoint !== null &&
+      distanceToCheckpoint < 40 &&
+      !isLast &&
+      !autoAdvanced.current
+    ) {
+      autoAdvanced.current = true;
+      const id = setTimeout(() => next(), 2000);
+      return () => clearTimeout(id);
+    }
+  }, [distanceToCheckpoint, isLast, next]);
 
   if (!state?.route) {
     navigate('/');
@@ -22,13 +70,10 @@ export function StoryPage() {
   }
 
   const { route } = state;
-  const { currentStep, isFirst, isLast, next, previous, swipeHandlers } =
-    useStoryNavigation(route.steps.length);
-
-  const step = route.steps[currentStep];
-  const checkpointTarget = step
-    ? { lat: step.checkpoint.lat, lng: step.checkpoint.lng }
-    : undefined;
+  const direction =
+    bearing !== null && distanceToCheckpoint !== null && distanceToCheckpoint < 40
+      ? computeDirection(bearing, heading)
+      : null;
 
   return (
     <div
@@ -36,17 +81,33 @@ export function StoryPage() {
       {...swipeHandlers}
     >
       <div style={{ padding: '16px 20px 8px' }}>
-        <button
-          onClick={() => navigate('/route', { state: { route } })}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: 0, marginBottom: 8 }}
-        >
-          {t.routeOverview}
-        </button>
-        <ProgressTracker current={currentStep + 1} total={route.steps.length} stepName={step?.landmark?.name} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <button
+            onClick={() => navigate('/route', { state: { route } })}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: 0 }}
+          >
+            {t.routeOverview}
+          </button>
+          <button
+            onClick={() => setPanelOpen(true)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 20, padding: 0, lineHeight: 1 }}
+            aria-label="All steps"
+          >
+            ☰
+          </button>
+        </div>
+        <ProgressTracker current={currentStep + 1} total={route.steps.length} stepName={getTranslatedLandmark(step?.landmark?.name, t)?.name ?? step?.landmark?.name} />
       </div>
 
       <div style={{ flex: 1, padding: '8px 16px 24px' }}>
-        {step && <StoryCard step={step} language={language} />}
+        {step && (
+          <StoryCard
+            step={step}
+            language={language}
+            distanceToCheckpoint={distanceToCheckpoint}
+            direction={direction}
+          />
+        )}
       </div>
 
       <div style={{ padding: '16px 20px', borderTop: '1px solid #e5e7eb', display: 'flex', gap: 12 }}>
@@ -87,9 +148,19 @@ export function StoryPage() {
 
       <LostMode
         active
-        checkpointTarget={checkpointTarget}
+        position={position}
+        distanceToCheckpoint={distanceToCheckpoint}
         onHelp={() => navigate('/route', { state: { route } })}
       />
+
+      {panelOpen && (
+        <StepPanel
+          steps={route.steps}
+          currentStep={currentStep}
+          onJump={goTo}
+          onClose={() => setPanelOpen(false)}
+        />
+      )}
     </div>
   );
 }

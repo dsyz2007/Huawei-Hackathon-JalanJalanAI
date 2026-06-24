@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useGPS } from '../hooks/useGPS';
 import { useLanguage } from '../context/LanguageContext';
+import type { GPSPosition } from '../types';
 
 const STALE_MS = 3 * 60 * 1000;
 const MOVEMENT_THRESHOLD_M = 10;
 
 interface Props {
   active: boolean;
-  checkpointTarget?: { lat: number; lng: number };
+  position: GPSPosition | null;
+  distanceToCheckpoint: number | null;
   onHelp: () => void;
 }
 
-export function LostMode({ active, checkpointTarget, onHelp }: Props) {
+export function LostMode({ active, position, distanceToCheckpoint, onHelp }: Props) {
   const { t } = useLanguage();
-  const { position, distanceToCheckpoint } = useGPS(checkpointTarget);
   const [showHelp, setShowHelp] = useState(false);
   const [lastMovedAt, setLastMovedAt] = useState(Date.now());
   const [lastPos, setLastPos] = useState(position);
@@ -62,10 +62,11 @@ export function LostMode({ active, checkpointTarget, onHelp }: Props) {
     >
       <p style={{ fontWeight: 700, fontSize: 18, margin: '0 0 8px' }}>{t.areYouLost}</p>
       {distanceToCheckpoint !== null && (
-        <p style={{ color: '#6b7280', margin: '0 0 12px', fontSize: 14 }}>
+        <p style={{ color: '#6b7280', margin: '0 0 6px', fontSize: 14 }}>
           {t.nextCheckpoint(Math.round(distanceToCheckpoint))}
         </p>
       )}
+      <p style={{ color: '#6b7280', margin: '0 0 12px', fontSize: 14 }}>{t.lostHelp}</p>
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
         <button
           onClick={() => { setShowHelp(false); setLastMovedAt(Date.now()); }}

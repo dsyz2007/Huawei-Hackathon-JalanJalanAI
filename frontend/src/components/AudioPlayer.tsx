@@ -8,28 +8,35 @@ interface Props {
 }
 
 export function AudioPlayer({ text, language }: Props) {
-  const { speaking, paused, speak, pause, resume, stop } = useSpeech();
+  const { speaking, paused, voiceUnavailable, speak, pause, resume, stop } = useSpeech();
   const { t } = useLanguage();
 
   return (
-    <div style={{ display: 'flex', gap: 10, justifyContent: 'center', padding: '12px 0' }}>
-      {!speaking ? (
-        <button onClick={() => speak(text, language)} style={btnStyle('#2563eb')}>
-          ▶ {t.play}
-        </button>
-      ) : paused ? (
-        <button onClick={resume} style={btnStyle('#2563eb')}>
-          ▶ {t.resume}
-        </button>
-      ) : (
-        <button onClick={pause} style={btnStyle('#f59e0b')}>
-          ⏸ {t.pause}
-        </button>
-      )}
-      {speaking && (
-        <button onClick={stop} style={btnStyle('#ef4444')}>
-          ■ {t.stop}
-        </button>
+    <div style={{ padding: '12px 0' }}>
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+        {!speaking ? (
+          <button onClick={() => speak(text, language)} style={btnStyle('#2563eb')}>
+            ▶ {t.play}
+          </button>
+        ) : paused ? (
+          <button onClick={resume} style={btnStyle('#2563eb')}>
+            ▶ {t.resume}
+          </button>
+        ) : (
+          <button onClick={pause} style={btnStyle('#f59e0b')}>
+            ⏸ {t.pause}
+          </button>
+        )}
+        {speaking && (
+          <button onClick={stop} style={btnStyle('#ef4444')}>
+            ■ {t.stop}
+          </button>
+        )}
+      </div>
+      {voiceUnavailable && (
+        <p style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', margin: '8px 0 0', lineHeight: 1.5 }}>
+          ⚠️ {t.voiceNotAvailable}
+        </p>
       )}
     </div>
   );

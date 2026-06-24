@@ -1,13 +1,27 @@
 import { AudioPlayer } from './AudioPlayer';
+import { useLanguage } from '../context/LanguageContext';
+import { getTranslatedLandmark } from '../utils/landmarks';
 import type { RouteStep, Language } from '../types';
 
 interface Props {
   step: RouteStep;
   language: Language;
+  distanceToCheckpoint?: number | null;
+  direction?: string | null;
 }
 
-export function StoryCard({ step, language }: Props) {
+export function StoryCard({ step, language, distanceToCheckpoint, direction }: Props) {
+  const { t } = useLanguage();
   const { landmark, instruction, checkpoint } = step;
+  const isNear = distanceToCheckpoint !== null && distanceToCheckpoint !== undefined && distanceToCheckpoint < 40;
+
+  const translatedLandmarkEntry = getTranslatedLandmark(landmark?.name, t);
+  const translatedLandmarkName = translatedLandmarkEntry?.name;
+  const translatedLandmarkDesc = translatedLandmarkEntry?.description;
+  const displayText = t.audioTemplates[checkpoint.action]?.(translatedLandmarkName)
+    ?? instruction?.text
+    ?? checkpoint.action.replace(/_/g, ' ');
+  const audioText = displayText;
 
   return (
     <div
@@ -44,11 +58,35 @@ export function StoryCard({ step, language }: Props) {
       )}
 
       <div style={{ padding: '20px 24px' }}>
+        {distanceToCheckpoint !== null && distanceToCheckpoint !== undefined && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '8px 12px', borderRadius: 8, marginBottom: 14,
+            background: isNear ? '#eff6ff' : '#f8fafc',
+            border: `1px solid ${isNear ? '#bfdbfe' : '#e2e8f0'}`,
+          }}>
+            <span style={{ fontSize: 15 }}>📍</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: isNear ? '#1d4ed8' : '#374151' }}>
+              {t.metersAway(Math.round(distanceToCheckpoint))}
+            </span>
+            {isNear && direction && (
+              <>
+                <span style={{ color: '#93c5fd' }}>·</span>
+                <span style={{ fontSize: 14, color: '#2563eb' }}>
+                  {t.landmarkIs(t.directions[direction] ?? direction)}
+                </span>
+              </>
+            )}
+          </div>
+        )}
+
         {landmark && (
           <>
-            <p style={{ fontWeight: 700, fontSize: 20, margin: '0 0 4px' }}>{landmark.name}</p>
+            <p style={{ fontWeight: 700, fontSize: 20, margin: '0 0 4px' }}>
+              {translatedLandmarkName ?? landmark.name}
+            </p>
             <p style={{ color: '#6b7280', fontSize: 14, margin: '0 0 14px' }}>
-              {landmark.description}
+              {translatedLandmarkDesc ?? landmark.description}
             </p>
           </>
         )}
@@ -62,11 +100,11 @@ export function StoryCard({ step, language }: Props) {
             color: '#111827',
           }}
         >
-          {instruction?.text ?? checkpoint.action.replace(/_/g, ' ')}
+          {displayText}
         </p>
 
         <AudioPlayer
-          text={instruction?.text ?? checkpoint.action.replace(/_/g, ' ')}
+          text={audioText}
           language={language}
         />
       </div>
