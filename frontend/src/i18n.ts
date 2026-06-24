@@ -38,6 +38,9 @@ export interface Translations {
   resume: string;
   stop: string;
   voiceNotAvailable: string;
+  noMovementAlert: string;
+  wrongDirectionAlert: string;
+  callLovedOne: string;
   landmarks: Record<string, { name: string; description: string }>;
 }
 
@@ -98,6 +101,9 @@ export const translations: Record<Language, Translations> = {
     resume: 'Resume',
     stop: 'Stop',
     voiceNotAvailable: 'Audio voice not available on this device. Please install English text-to-speech in your device settings for the best experience.',
+    noMovementAlert: "You haven't moved for a while. Are you okay?",
+    wrongDirectionAlert: 'You seem to be going the wrong way. Do you need help?',
+    callLovedOne: 'Call Loved One',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B', description: 'Blue MRT sign above the exit' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine on the corner' },
@@ -167,6 +173,9 @@ export const translations: Record<Language, Translations> = {
     resume: 'Resume',
     stop: 'Stop',
     voiceNotAvailable: 'Audio not available leh. Go to your device settings and install English text-to-speech lah.',
+    noMovementAlert: 'Eh, you never move for very long leh. You okay or not?',
+    wrongDirectionAlert: 'Eh, you going wrong way lah. Need help or not?',
+    callLovedOne: 'Call Family Lah',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B lor', description: 'Blue MRT sign up there, cannot miss one' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine at the corner lor' },
@@ -236,6 +245,9 @@ export const translations: Record<Language, Translations> = {
     resume: '繼續',
     stop: '停止',
     voiceNotAvailable: '此裝置上沒有語音功能。請到裝置設定安裝廣東話文字轉語音以獲得最佳體驗。',
+    noMovementAlert: '你好耐冇郁過喇。你係咪唔舒服？',
+    wrongDirectionAlert: '你好似行錯路喎。需要幫忙嗎？',
+    callLovedOne: '致電家人',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口上方有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角有黃色提款機' },
@@ -305,6 +317,9 @@ export const translations: Record<Language, Translations> = {
     resume: '繼續',
     stop: '停止',
     voiceNotAvailable: '此裝置無語音功能。請到裝置設定安裝潮州話文字轉語音以獲得最佳體驗。',
+    noMovementAlert: '汝好久無行囉。汝有無要緊？',
+    wrongDirectionAlert: '汝好像行錯路哩。需要幫忙無？',
+    callLovedOne: '打電話予家人',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口頂頭有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -374,6 +389,9 @@ export const translations: Record<Language, Translations> = {
     resume: '繼續',
     stop: '停止',
     voiceNotAvailable: '此裝置無語音功能。請到裝置設定安裝閩南語文字轉語音以獲得最佳體驗。',
+    noMovementAlert: '汝好久無行矣。汝有無要緊？',
+    wrongDirectionAlert: '汝親像行錯路哩。需要幫忙無？',
+    callLovedOne: '打電話予家人',
     landmarks: {
       bedokMrtExitB: { name: '勿洛捷運站B出口', description: '出口頂懸有藍色捷運標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -443,6 +461,9 @@ export const translations: Record<Language, Translations> = {
     resume: '继续',
     stop: '停止',
     voiceNotAvailable: '此设备上没有语音功能。请前往设备设置安装中文（简体）文字转语音以获得最佳体验。',
+    noMovementAlert: '您已经很久没有移动了。您还好吗？',
+    wrongDirectionAlert: '您好像走错方向了。需要帮助吗？',
+    callLovedOne: '致电家人',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地铁站B出口', description: '出口上方有蓝色地铁标志' },
       posbAtm: { name: 'POSB ATM机', description: '街角有黄色ATM机' },
@@ -512,6 +533,9 @@ export const translations: Record<Language, Translations> = {
     resume: 'Teruskan',
     stop: 'Berhenti',
     voiceNotAvailable: 'Suara tidak tersedia pada peranti ini. Sila pergi ke tetapan peranti dan pasang text-to-speech Bahasa Melayu untuk pengalaman terbaik.',
+    noMovementAlert: 'Anda tidak bergerak untuk seketika. Adakah anda baik-baik saja?',
+    wrongDirectionAlert: 'Nampaknya anda pergi ke arah yang salah. Perlukan bantuan?',
+    callLovedOne: 'Hubungi Ahli Keluarga',
     landmarks: {
       bedokMrtExitB: { name: 'Pintu Keluar B MRT Bedok', description: 'Tanda MRT biru di atas pintu keluar' },
       posbAtm: { name: 'ATM POSB', description: 'Mesin ATM kuning di sudut jalan' },
@@ -581,6 +605,9 @@ export const translations: Record<Language, Translations> = {
     resume: 'தொடர்',
     stop: 'நிறுத்து',
     voiceNotAvailable: 'இந்த சாதனத்தில் குரல் இல்லை. சிறந்த அனுபவத்திற்கு உங்கள் சாதன அமைப்புகளில் தமிழ் text-to-speech நிறுவுங்கள்.',
+    noMovementAlert: 'நீங்கள் சிறிது நேரமாக நகரவில்லை. நீங்கள் நலமாக இருக்கிறீர்களா?',
+    wrongDirectionAlert: 'நீங்கள் தவறான திசையில் செல்கிறீர்கள். உதவி தேவையா?',
+    callLovedOne: 'குடும்பத்தை அழைக்கவும்',
     landmarks: {
       bedokMrtExitB: { name: 'பேடோக் MRT வெளியேற்று B', description: 'வெளியேற்றுக்கு மேலே நீல MRT அடையாளம்' },
       posbAtm: { name: 'POSB ATM', description: 'மூலையில் மஞ்சள் ATM இயந்திரம்' },
@@ -650,6 +677,9 @@ export const translations: Record<Language, Translations> = {
     resume: 'जारी रखें',
     stop: 'बंद करें',
     voiceNotAvailable: 'इस डिवाइस पर आवाज़ उपलब्ध नहीं है। बेहतर अनुभव के लिए अपने डिवाइस सेटिंग में हिंदी text-to-speech इंस्टॉल करें।',
+    noMovementAlert: 'आप काफी देर से नहीं चले। क्या आप ठीक हैं?',
+    wrongDirectionAlert: 'लगता है आप गलत दिशा में जा रहे हैं। क्या मदद चाहिए?',
+    callLovedOne: 'परिजन को फ़ोन करें',
     landmarks: {
       bedokMrtExitB: { name: 'बेडोक MRT निकास B', description: 'निकास के ऊपर नीला MRT संकेत' },
       posbAtm: { name: 'POSB ATM', description: 'कोने पर पीला ATM मशीन' },

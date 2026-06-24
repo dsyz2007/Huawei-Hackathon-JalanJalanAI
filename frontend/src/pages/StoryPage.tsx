@@ -4,11 +4,18 @@ import { StoryCard } from '../components/StoryCard';
 import { ProgressTracker } from '../components/ProgressTracker';
 import { LostMode } from '../components/LostMode';
 import { StepPanel } from '../components/StepPanel';
+import { ProactiveHelpPopup } from '../components/ProactiveHelpPopup';
 import { useStoryNavigation } from '../hooks/useStoryNavigation';
 import { useGPS } from '../hooks/useGPS';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslatedLandmark } from '../utils/landmarks';
+import { haversineDistance } from '../utils/geo';
 import type { RouteResponse } from '../types';
+
+const EMERGENCY_CONTACT = '+6598765432';
+const NO_MOVEMENT_MS = 60_000;
+const WRONG_DIR_MS = 45_000;
+const SNOOZE_MS = 5 * 60_000;
 
 interface LocationState {
   route: RouteResponse;
@@ -34,6 +41,10 @@ export function StoryPage() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const [panelOpen, setPanelOpen] = useState(false);
+  const [helpMessage, setHelpMessage] = useState<string | null>(null);
+  const lastMovedRef = useRef<{ lat: number; lng: number; time: number } | null>(null);
+  const wrongDirSinceRef = useRef<number | null>(null);
+  const helpSnoozedUntilRef = useRef(0);
 
   const totalSteps = state?.route?.steps?.length ?? 0;
   const { currentStep, isFirst, isLast, next, previous, goTo, swipeHandlers } =
@@ -63,6 +74,40 @@ export function StoryPage() {
       return () => clearTimeout(id);
     }
   }, [distanceToCheckpoint, isLast, next]);
+
+  useEffect(() => {
+    if (!position || Date.now() < helpSnoozedUntilRef.current) return;
+    const { lat, lng } = position;
+    const now = Date.now();
+    if (!lastMovedRef.current) {
+      lastMovedRef.current = { lat, lng, time: now };
+      return;
+    }
+    const dist = haversineDistance(lastMovedRef.current, { lat, lng });
+    if (dist > 5) {
+      lastMovedRef.current = { lat, lng, time: now };
+    } else if (now - lastMovedRef.current.time > NO_MOVEMENT_MS) {
+      setHelpMessage(t.noMovementAlert);
+      helpSnoozedUntilRef.current = now + SNOOZE_MS;
+      lastMovedRef.current = { lat, lng, time: now };
+    }
+  }, [position, t.noMovementAlert]);
+
+  useEffect(() => {
+    if (bearing === null || heading === null || Date.now() < helpSnoozedUntilRef.current) return;
+    const diff = Math.abs(((bearing - heading + 540) % 360) - 180);
+    const now = Date.now();
+    if (diff > 135) {
+      if (!wrongDirSinceRef.current) wrongDirSinceRef.current = now;
+      else if (now - wrongDirSinceRef.current > WRONG_DIR_MS) {
+        setHelpMessage(t.wrongDirectionAlert);
+        helpSnoozedUntilRef.current = now + SNOOZE_MS;
+        wrongDirSinceRef.current = null;
+      }
+    } else {
+      wrongDirSinceRef.current = null;
+    }
+  }, [position, bearing, heading, t.wrongDirectionAlert]);
 
   if (!state?.route) {
     navigate('/');
@@ -159,6 +204,17 @@ export function StoryPage() {
           currentStep={currentStep}
           onJump={goTo}
           onClose={() => setPanelOpen(false)}
+        />
+      )}
+
+      {helpMessage && (
+        <ProactiveHelpPopup
+          message={helpMessage}
+          onDismiss={() => setHelpMessage(null)}
+          onCall={() => {
+            window.location.href = `tel:${EMERGENCY_CONTACT}`;
+            setHelpMessage(null);
+          }}
         />
       )}
     </div>
