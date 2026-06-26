@@ -30,7 +30,7 @@ export function StepPanel({ steps, currentStep, onJump, onClose }: Props) {
           <span style={{ fontSize: 17, fontWeight: 700 }}>{t.allSteps}</span>
           <button
             onClick={onClose}
-            style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#6b7280', lineHeight: 1 }}
+            style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#6b7280', lineHeight: 1 }}
           >
             ✕
           </button>
@@ -46,7 +46,7 @@ export function StepPanel({ steps, currentStep, onJump, onClose }: Props) {
                 onClick={() => { onJump(i); onClose(); }}
                 style={{
                   width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center',
-                  gap: 14, padding: '14px 20px', border: 'none',
+                  minHeight: 56, gap: 14, padding: '14px 20px', border: 'none',
                   borderBottom: '1px solid #f3f4f6',
                   background: isActive ? '#eff6ff' : '#fff',
                   borderLeft: isActive ? '4px solid #2563eb' : '4px solid transparent',

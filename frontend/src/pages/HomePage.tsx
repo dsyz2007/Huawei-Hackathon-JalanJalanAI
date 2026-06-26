@@ -133,6 +133,7 @@ const inputStyle: React.CSSProperties = {
 
 function btnStyle(bg: string): React.CSSProperties {
   return {
+    minHeight: 48,
     padding: '14px 20px',
     borderRadius: 10,
     background: bg,

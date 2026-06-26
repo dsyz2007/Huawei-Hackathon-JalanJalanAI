@@ -36,7 +36,7 @@ export function ProactiveHelpPopup({ message, onDismiss, onCall }: Props) {
           <button
             onClick={onCall}
             style={{
-              padding: '14px', borderRadius: 12,
+              minHeight: 48, padding: '14px', borderRadius: 12,
               background: '#ef4444', color: '#fff',
               border: 'none', fontSize: 17, fontWeight: 700, cursor: 'pointer',
             }}
@@ -46,7 +46,7 @@ export function ProactiveHelpPopup({ message, onDismiss, onCall }: Props) {
           <button
             onClick={onDismiss}
             style={{
-              padding: '14px', borderRadius: 12,
+              minHeight: 48, padding: '14px', borderRadius: 12,
               background: '#f1f5f9', color: '#374151',
               border: 'none', fontSize: 16, fontWeight: 600, cursor: 'pointer',
             }}

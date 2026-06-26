@@ -70,13 +70,13 @@ export function LostMode({ active, position, distanceToCheckpoint, onHelp }: Pro
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
         <button
           onClick={() => { setShowHelp(false); setLastMovedAt(Date.now()); }}
-          style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #e5e7eb', cursor: 'pointer', background: '#fff' }}
+          style={{ minHeight: 48, minWidth: 48, padding: '10px 20px', borderRadius: 8, border: '1px solid #e5e7eb', cursor: 'pointer', background: '#fff', fontSize: 16, fontWeight: 600 }}
         >
           {t.imOk}
         </button>
         <button
           onClick={() => { setShowHelp(false); onHelp(); }}
-          style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: '#2563eb', color: '#fff', cursor: 'pointer', fontWeight: 600 }}
+          style={{ minHeight: 48, minWidth: 48, padding: '10px 20px', borderRadius: 8, border: 'none', background: '#2563eb', color: '#fff', cursor: 'pointer', fontSize: 16, fontWeight: 600 }}
         >
           {t.needHelp}
         </button>

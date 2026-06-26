@@ -44,12 +44,14 @@ export function AudioPlayer({ text, language }: Props) {
 
 function btnStyle(bg: string): React.CSSProperties {
   return {
-    padding: '10px 20px',
+    minHeight: 48,
+    minWidth: 48,
+    padding: '10px 24px',
     borderRadius: 8,
     background: bg,
     color: '#fff',
     border: 'none',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 600,
     cursor: 'pointer',
   };

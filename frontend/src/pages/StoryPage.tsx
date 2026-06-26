@@ -41,6 +41,7 @@ export function StoryPage() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const [panelOpen, setPanelOpen] = useState(false);
+  const [stopConfirm, setStopConfirm] = useState(false);
   const [helpMessage, setHelpMessage] = useState<string | null>(null);
   const lastMovedRef = useRef<{ lat: number; lng: number; time: number } | null>(null);
   const minDistToCheckpointRef = useRef<number | null>(null);
@@ -127,22 +128,20 @@ export function StoryPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <button
             onClick={() => navigate('/route', { state: { route } })}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: 0 }}
+            style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: '0 8px' }}
           >
             {t.routeOverview}
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
-              onClick={() => {
-                if (window.confirm('Stop this route and return to home?')) navigate('/');
-              }}
-              style={{ background: 'none', border: '1px solid #ef4444', borderRadius: 6, cursor: 'pointer', color: '#ef4444', fontSize: 13, fontWeight: 600, padding: '4px 10px' }}
+              onClick={() => setStopConfirm(true)}
+              style={{ minHeight: 48, minWidth: 48, background: 'none', border: '1px solid #ef4444', borderRadius: 8, cursor: 'pointer', color: '#ef4444', fontSize: 14, fontWeight: 600, padding: '0 14px' }}
             >
-              ■ Stop Route
+              {t.stopRoute}
             </button>
             <button
               onClick={() => setPanelOpen(true)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 20, padding: 0, lineHeight: 1 }}
+              style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 22, padding: '0 4px', lineHeight: 1 }}
               aria-label="All steps"
             >
               ☰
@@ -169,6 +168,7 @@ export function StoryPage() {
           disabled={isFirst}
           style={{
             flex: 1,
+            minHeight: 56,
             padding: '13px',
             borderRadius: 10,
             border: '1px solid #e5e7eb',
@@ -185,14 +185,14 @@ export function StoryPage() {
         {isLast ? (
           <button
             onClick={() => navigate('/')}
-            style={{ flex: 1, padding: '13px', borderRadius: 10, border: 'none', background: '#22c55e', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
+            style={{ flex: 1, minHeight: 56, padding: '13px', borderRadius: 10, border: 'none', background: '#22c55e', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
           >
             {t.arrived}
           </button>
         ) : (
           <button
             onClick={next}
-            style={{ flex: 1, padding: '13px', borderRadius: 10, border: 'none', background: '#2563eb', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
+            style={{ flex: 1, minHeight: 56, padding: '13px', borderRadius: 10, border: 'none', background: '#2563eb', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
           >
             {t.next}
           </button>
@@ -224,6 +224,31 @@ export function StoryPage() {
             setHelpMessage(null);
           }}
         />
+      )}
+
+      {stopConfirm && (
+        <>
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 400 }} />
+          <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: '#fff', borderRadius: 20, padding: '32px 24px', maxWidth: 340, width: '90%', zIndex: 401, textAlign: 'center', boxShadow: '0 8px 40px rgba(0,0,0,0.25)' }}>
+            <p style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: '0 0 24px', lineHeight: 1.5 }}>
+              {t.stopRouteConfirm}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <button
+                onClick={() => navigate('/')}
+                style={{ minHeight: 56, padding: '14px', borderRadius: 12, background: '#ef4444', color: '#fff', border: 'none', fontSize: 17, fontWeight: 700, cursor: 'pointer' }}
+              >
+                {t.stopRoute}
+              </button>
+              <button
+                onClick={() => setStopConfirm(false)}
+                style={{ minHeight: 56, padding: '14px', borderRadius: 12, background: '#f1f5f9', color: '#374151', border: 'none', fontSize: 16, fontWeight: 600, cursor: 'pointer' }}
+              >
+                {t.imOk}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

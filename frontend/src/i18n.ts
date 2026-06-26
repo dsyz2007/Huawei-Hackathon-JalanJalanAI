@@ -41,6 +41,8 @@ export interface Translations {
   noMovementAlert: string;
   wrongDirectionAlert: string;
   callLovedOne: string;
+  stopRoute: string;
+  stopRouteConfirm: string;
   landmarks: Record<string, { name: string; description: string }>;
 }
 
@@ -104,6 +106,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: "You haven't moved for a while. Are you okay?",
     wrongDirectionAlert: 'You seem to be going the wrong way. Do you need help?',
     callLovedOne: 'Call Loved One',
+    stopRoute: '■ Stop Route',
+    stopRouteConfirm: 'Stop this route and return to home?',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B', description: 'Blue MRT sign above the exit' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine on the corner' },
@@ -176,6 +180,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: 'Eh, you never move for very long leh. You okay or not?',
     wrongDirectionAlert: 'Eh, you going wrong way lah. Need help or not?',
     callLovedOne: 'Call Family Lah',
+    stopRoute: '■ Stop Already',
+    stopRouteConfirm: 'Stop route already ah? Go back home?',
     landmarks: {
       bedokMrtExitB: { name: 'Bedok MRT Exit B lor', description: 'Blue MRT sign up there, cannot miss one' },
       posbAtm: { name: 'POSB ATM', description: 'Yellow ATM machine at the corner lor' },
@@ -248,6 +254,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: '你好耐冇郁過喇。你係咪唔舒服？',
     wrongDirectionAlert: '你好似行錯路喎。需要幫忙嗎？',
     callLovedOne: '致電家人',
+    stopRoute: '■ 停止路線',
+    stopRouteConfirm: '你確定要停止路線，返回主頁？',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口上方有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角有黃色提款機' },
@@ -320,6 +328,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: '汝好久無行囉。汝有無要緊？',
     wrongDirectionAlert: '汝好像行錯路哩。需要幫忙無？',
     callLovedOne: '打電話予家人',
+    stopRoute: '■ 停止路線',
+    stopRouteConfirm: '汝確定要停止路線，轉去主頁？',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地鐵站B出口', description: '出口頂頭有藍色地鐵標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -392,6 +402,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: '汝好久無行矣。汝有無要緊？',
     wrongDirectionAlert: '汝親像行錯路哩。需要幫忙無？',
     callLovedOne: '打電話予家人',
+    stopRoute: '■ 停止路線',
+    stopRouteConfirm: '汝確定欲停止路線，轉去主頁？',
     landmarks: {
       bedokMrtExitB: { name: '勿洛捷運站B出口', description: '出口頂懸有藍色捷運標誌' },
       posbAtm: { name: 'POSB提款機', description: '街角彼个黃色提款機' },
@@ -464,6 +476,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: '您已经很久没有移动了。您还好吗？',
     wrongDirectionAlert: '您好像走错方向了。需要帮助吗？',
     callLovedOne: '致电家人',
+    stopRoute: '■ 停止路线',
+    stopRouteConfirm: '确定要停止路线并返回主页吗？',
     landmarks: {
       bedokMrtExitB: { name: '勿洛地铁站B出口', description: '出口上方有蓝色地铁标志' },
       posbAtm: { name: 'POSB ATM机', description: '街角有黄色ATM机' },
@@ -536,6 +550,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: 'Anda tidak bergerak untuk seketika. Adakah anda baik-baik saja?',
     wrongDirectionAlert: 'Nampaknya anda pergi ke arah yang salah. Perlukan bantuan?',
     callLovedOne: 'Hubungi Ahli Keluarga',
+    stopRoute: '■ Henti Laluan',
+    stopRouteConfirm: 'Henti laluan ini dan kembali ke halaman utama?',
     landmarks: {
       bedokMrtExitB: { name: 'Pintu Keluar B MRT Bedok', description: 'Tanda MRT biru di atas pintu keluar' },
       posbAtm: { name: 'ATM POSB', description: 'Mesin ATM kuning di sudut jalan' },
@@ -608,6 +624,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: 'நீங்கள் சிறிது நேரமாக நகரவில்லை. நீங்கள் நலமாக இருக்கிறீர்களா?',
     wrongDirectionAlert: 'நீங்கள் தவறான திசையில் செல்கிறீர்கள். உதவி தேவையா?',
     callLovedOne: 'குடும்பத்தை அழைக்கவும்',
+    stopRoute: '■ பாதை நிறுத்து',
+    stopRouteConfirm: 'இந்த பாதையை நிறுத்தி முகப்பு பக்கத்திற்கு திரும்பவா?',
     landmarks: {
       bedokMrtExitB: { name: 'பேடோக் MRT வெளியேற்று B', description: 'வெளியேற்றுக்கு மேலே நீல MRT அடையாளம்' },
       posbAtm: { name: 'POSB ATM', description: 'மூலையில் மஞ்சள் ATM இயந்திரம்' },
@@ -680,6 +698,8 @@ export const translations: Record<Language, Translations> = {
     noMovementAlert: 'आप काफी देर से नहीं चले। क्या आप ठीक हैं?',
     wrongDirectionAlert: 'लगता है आप गलत दिशा में जा रहे हैं। क्या मदद चाहिए?',
     callLovedOne: 'परिजन को फ़ोन करें',
+    stopRoute: '■ रास्ता बंद करें',
+    stopRouteConfirm: 'क्या आप इस रास्ते को बंद करके वापस जाना चाहते हैं?',
     landmarks: {
       bedokMrtExitB: { name: 'बेडोक MRT निकास B', description: 'निकास के ऊपर नीला MRT संकेत' },
       posbAtm: { name: 'POSB ATM', description: 'कोने पर पीला ATM मशीन' },
