@@ -131,13 +131,23 @@ export function StoryPage() {
           >
             {t.routeOverview}
           </button>
-          <button
-            onClick={() => setPanelOpen(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 20, padding: 0, lineHeight: 1 }}
-            aria-label="All steps"
-          >
-            ☰
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              onClick={() => {
+                if (window.confirm('Stop this route and return to home?')) navigate('/');
+              }}
+              style={{ background: 'none', border: '1px solid #ef4444', borderRadius: 6, cursor: 'pointer', color: '#ef4444', fontSize: 13, fontWeight: 600, padding: '4px 10px' }}
+            >
+              ■ Stop Route
+            </button>
+            <button
+              onClick={() => setPanelOpen(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 20, padding: 0, lineHeight: 1 }}
+              aria-label="All steps"
+            >
+              ☰
+            </button>
+          </div>
         </div>
         <ProgressTracker current={currentStep + 1} total={route.steps.length} stepName={getTranslatedLandmark(step?.landmark?.name, t)?.name ?? step?.landmark?.name} />
       </div>
