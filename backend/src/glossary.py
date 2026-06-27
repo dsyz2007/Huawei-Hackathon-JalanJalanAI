@@ -37,12 +37,30 @@ GLOSSARY = {
     },
 }
 
+
+# A short clause appended when we have a landmark to point at.
+LANDMARK_SUFFIX = {
+    "english": " Look for the {landmark}.",
+    "singlish": " See the {landmark} ah.",
+    "chinese": " 找{landmark}。",
+    "malay": " Cari {landmark}.",
+}
+
+
 DEFAULT_LANGUAGE = "english"
 
 
-def phrase(action: Action, language: str, origin: str = "", destination: str = "") -> tuple[str, str]:
+def phrase(action: Action, language: str, origin: str = "", destination: str = "", landmark: str | None = None) -> tuple[str, str]:
     table = GLOSSARY.get(language, GLOSSARY[DEFAULT_LANGUAGE])
     text_tpl, audio_tpl = table[action]
     text = text_tpl.format(origin=origin, destination=destination)
     audio = audio_tpl.format(origin=origin, destination=destination)
+
+    if landmark:
+        suffix = LANDMARK_SUFFIX.get(language, LANDMARK_SUFFIX[DEFAULT_LANGUAGE])
+        clause = suffix.format(landmark=landmark)
+        text += clause
+        audio += clause
+
     return text, audio
+
