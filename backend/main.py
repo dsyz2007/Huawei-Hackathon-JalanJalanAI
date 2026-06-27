@@ -4,6 +4,7 @@ from backend.src import demo_data
 from backend.src import init_db
 from backend.src import config
 from backend.src import onemap
+from backend.src import checkpoints
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -96,3 +97,14 @@ def route_debug(origin: str, destination: str):
         "num_points": len(result.points),
         "points": result.points,
     }
+
+
+@app.get("/checkpoints-debug")
+def checkpoints_debug(origin: str, destination: str):
+    start = onemap.geocode(origin)
+    end = onemap.geocode(destination)
+    if start is None or end is None:
+        return {"found": False}
+    result = onemap.route(start, end)
+    cps = checkpoints.extract_checkpoints(result, checkpoints.looks_like_mrt(origin))
+    return {"found": True, "count": len(cps), "checkpoints": cps}
