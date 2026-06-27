@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.src import demo_data
+from backend.src import config
+from backend.src import onemap
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -26,7 +28,7 @@ app.add_middleware(
 
 @app.get('/health')
 def health():
-    return {"ok" : True}
+    return {"ok" : True, "onemap": config.has_onemap(), "gemini": config.has_gemini()}
 
 
 @app.post('/route', response_model=RouteResponse)
@@ -57,4 +59,19 @@ def route(req: RouteRequest):
 @app.post('/demo-route', response_model=RouteResponse)
 def demo_route(req: DemoRouteRequest):
     return demo_data.get_demo_route(req.id, req.language)
+
+
+@app.get('/geocode')
+def geocode_place(q: str):
+    result = onemap.geocode(q)
+    if result is None:
+        return {"found": False, "query": q}
+    else:
+        return {
+            "found": True,
+            "name": result.name,
+            "lat": result.lat,
+            "lng": result.lng,
+            "source": result.source
+        }
 
