@@ -1,5 +1,5 @@
 import uuid
-from backend.src import onemap, checkpoints, glossary, overpass
+from backend.src import onemap, checkpoints, glossary, overpass, ranking
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
 
 
@@ -32,11 +32,14 @@ def _to_landmark(feature: overpass.OsmFeature) -> Landmark:
     return Landmark(name=name, description=f"About {round(feature.dist_m)}m away")
 
 
-def _pick_landmark(features: list[overpass.OsmFeature]) -> Landmark | None:
-    if not features:
+def _pick_landmark(features, action, prefer_shelter: bool) -> Landmark | None:
+    result = ranking.best_landmark(features, action, prefer_shelter)
+    if result is None:
         return None
-    nearest = min(features, key=lambda f: f.dist_m)   # Lesson 9 replaces this with ranking
-    return _to_landmark(nearest)
+    feature, score = result
+    landmark = _to_landmark(feature)
+    landmark.salience_score = score
+    return landmark
 
 
 def build_route(origin: str, destination: str, language: str, prefer_shelter: bool) -> RouteResponse | None:
@@ -50,7 +53,7 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
 
     steps = []
     for i, cp in enumerate(cps, start=1):
-        landmark = _pick_landmark(overpass.nearby_landmarks(cp.lat, cp.lng))
+        landmark = _pick_landmark(overpass.nearby_landmarks(cp.lat, cp.lng), cp.action, prefer_shelter)
         text, audio = glossary.phrase(
             cp.action, language,
             origin=origin, destination=destination,
