@@ -8,9 +8,13 @@ const LANG_BCP47: Record<Language, string[]> = {
   teochew:  ['zh-TW', 'zh-CN'],
   hokkien:  ['nan', 'zh-TW'],
   chinese:  ['zh-CN', 'zh-TW'],
-  malay:    ['ms-MY', 'ms'],
+  malay:    ['ms-MY', 'ms-SG', 'ms', 'id-ID', 'id'],
   tamil:    ['ta-SG', 'ta-IN', 'ta'],
   hindi:    ['hi-IN', 'hi'],
+};
+
+const VOICE_NAME_HINTS: Partial<Record<Language, string[]>> = {
+  malay: ['amira', 'damayanti', 'malay', 'melayu'],
 };
 
 const LANG_RATE: Partial<Record<Language, number>> = {
@@ -55,7 +59,13 @@ function waitForVoices(): Promise<SpeechSynthesisVoice[]> {
   });
 }
 
-function getBestVoice(candidates: string[], voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+function getBestVoice(candidates: string[], voices: SpeechSynthesisVoice[], nameHints?: string[]): SpeechSynthesisVoice | null {
+  if (nameHints) {
+    for (const hint of nameHints) {
+      const match = voices.find(v => v.name.toLowerCase().includes(hint));
+      if (match) return match;
+    }
+  }
   for (const bcp47 of candidates) {
     const lang = bcp47.toLowerCase();
     const baseLang = lang.split('-')[0];
@@ -70,6 +80,7 @@ function getBestVoice(candidates: string[], voices: SpeechSynthesisVoice[]): Spe
 export function useSpeech() {
   const [speaking, setSpeaking] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [voiceUnavailable, setVoiceUnavailable] = useState(false);
   const cancelledRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const keepaliveRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -99,7 +110,8 @@ export function useSpeech() {
     const voices = await waitForVoices();
     if (cancelledRef.current) return;
 
-    const voice = getBestVoice(candidates, voices);
+    const voice = getBestVoice(candidates, voices, VOICE_NAME_HINTS[language]);
+    setVoiceUnavailable(voice === null);
 
     // Keepalive: prevents Chrome from cutting off speech after ~15 seconds
     keepaliveRef.current = setInterval(() => {
@@ -166,5 +178,5 @@ export function useSpeech() {
     }
   }, []);
 
-  return { speaking, paused, speak, pause, resume, stop };
+  return { speaking, paused, voiceUnavailable, speak, pause, resume, stop };
 }

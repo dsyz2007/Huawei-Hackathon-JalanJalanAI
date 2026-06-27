@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.src import demo_data
+from backend.src import init_db
 from backend.src import config
 from backend.src import onemap
 from backend.src.models import (
@@ -16,6 +17,10 @@ from backend.src.models import (
 
 
 app = FastAPI(title = "JalanJalan AI")
+
+@app.on_event("startup")
+def startup():
+    init_db.init()
 
 #add CORS (Cross-Origin Resource Sharing) to allow frontend and backend to link and call each other
 app.add_middleware(

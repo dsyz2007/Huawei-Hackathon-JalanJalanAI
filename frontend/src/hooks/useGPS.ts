@@ -13,10 +13,21 @@ function haversineDistance(a: GPSPosition, b: { lat: number; lng: number }): num
   return R * 2 * Math.atan2(Math.sqrt(chord), Math.sqrt(1 - chord));
 }
 
+function computeBearing(a: GPSPosition, b: { lat: number; lng: number }): number {
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const lat1 = (a.lat * Math.PI) / 180;
+  const lat2 = (b.lat * Math.PI) / 180;
+  const y = Math.sin(dLng) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+
 export function useGPS(checkpointTarget?: { lat: number; lng: number }) {
   const [position, setPosition] = useState<GPSPosition | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [distanceToCheckpoint, setDistanceToCheckpoint] = useState<number | null>(null);
+  const [bearing, setBearing] = useState<number | null>(null);
+  const [heading, setHeading] = useState<number | null>(null);
   const watchId = useRef<number | null>(null);
 
   useEffect(() => {
@@ -35,8 +46,10 @@ export function useGPS(checkpointTarget?: { lat: number; lng: number }) {
         };
         setPosition(gps);
         setError(null);
+        setHeading(pos.coords.heading ?? null);
         if (checkpointTarget) {
           setDistanceToCheckpoint(haversineDistance(gps, checkpointTarget));
+          setBearing(computeBearing(gps, checkpointTarget));
         }
       },
       (err) => setError(err.message),
@@ -48,5 +61,5 @@ export function useGPS(checkpointTarget?: { lat: number; lng: number }) {
     };
   }, [checkpointTarget?.lat, checkpointTarget?.lng]);
 
-  return { position, error, distanceToCheckpoint };
+  return { position, error, distanceToCheckpoint, bearing, heading };
 }

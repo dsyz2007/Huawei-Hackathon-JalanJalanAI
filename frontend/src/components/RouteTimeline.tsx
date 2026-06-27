@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import { getTranslatedLandmark } from '../utils/landmarks';
 import type { RouteStep } from '../types';
 
 interface Props {
@@ -54,7 +55,9 @@ export function RouteTimeline({ steps, currentStep, onSelectStep }: Props) {
                 {t.actions[step.checkpoint.action] ?? step.checkpoint.action}
               </span>
               {step.landmark && (
-                <span style={{ fontSize: 13, color: '#6b7280' }}>{step.landmark.name}</span>
+                <span style={{ fontSize: 13, color: '#6b7280' }}>
+                  {getTranslatedLandmark(step.landmark.name, t)?.name ?? step.landmark.name}
+                </span>
               )}
             </span>
           </button>
