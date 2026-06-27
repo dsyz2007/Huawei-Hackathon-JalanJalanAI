@@ -80,3 +80,19 @@ def geocode_place(q: str):
             "source": result.source
         }
 
+
+@app.get("/route-debug")
+def route_debug(origin: str, destination: str):
+    start = onemap.geocode(origin)
+    end = onemap.geocode(destination)
+    if start is None or end is None:
+        return {"found": False, "origin": origin, "destination": destination}
+    result = onemap.route(start, end)
+    return {
+        "found": True,
+        "source": result.source,
+        "distance_m": round(result.total_distance_m),
+        "time_s": round(result.total_time_s),
+        "num_points": len(result.points),
+        "points": result.points,
+    }
