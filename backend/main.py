@@ -30,12 +30,14 @@ def startup():
     init_db.init()
 
 #add CORS (Cross-Origin Resource Sharing) to allow frontend and backend to link and call each other
+_origins = config.cors_origins()          # set via CORS_ORIGINS env (comma-separated), or "*"
+_allow_all = _origins == ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], #the list of origins permitted to call you (5173 is Vite's default dev-server port, list both localhost and 127.0.0.1 as they count as diff origins)
-    allow_credentials=True, #Permit cookies/auth headers to ride along
-    allow_methods=["*"], # '*' allow all HTTP methods (e.g. GET, POST, OPTIONS, ...)
-    allow_headers=["*"] # '*' allow all request headers (e.g. Content-Type)
+    allow_origins=_origins,
+    allow_credentials=not _allow_all,     # credentials can't be combined with "*"
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get('/health')
