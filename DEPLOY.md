@@ -21,7 +21,7 @@ Two free services: **Render** (FastAPI backend) + **Vercel** (React frontend). B
    | `GEMINI_MODEL` | `gemini-2.5-flash-lite` |
    | `ONEMAP_EMAIL` | *your OneMap email* |
    | `ONEMAP_PASSWORD` | *your OneMap password* |
-   | `MAPILLARY_TOKEN` | *your Mapillary token* |
+   | `GOOGLE_MAPS_KEY` | *your Google Street View key (optional — enables photos)* |
    | `CORS_ORIGINS` | `*` *(simplest; tighten to your Vercel URL later)* |
 4. **Create Web Service.** You'll get a URL like `https://jalanjalan-backend.onrender.com`.
 5. Test it: open `https://<your-backend>/health` → should show `{"ok":true,...}`.

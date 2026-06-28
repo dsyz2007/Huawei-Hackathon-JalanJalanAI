@@ -20,7 +20,7 @@ services:
         sync: false
       - key: ONEMAP_PASSWORD
         sync: false
-      - key: MAPILLARY_TOKEN
+      - key: GOOGLE_MAPS_KEY
         sync: false
       - key: CORS_ORIGINS
         sync: false        # set to your Vercel URL (or "*" for the quickest demo)
