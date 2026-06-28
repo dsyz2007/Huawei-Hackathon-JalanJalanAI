@@ -17,12 +17,19 @@ const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'hindi', label: 'हिन्दी' },
 ];
 
+const COMMON_PLACES = [
+  'Bedok MRT', 'Tampines MRT', 'Ang Mo Kio MRT', 'Jurong East MRT', 'Orchard MRT',
+  'Bishan MRT', 'Woodlands MRT', 'Bedok Interchange', 'Tampines Mall', 'AMK Hub',
+  'ION Orchard', 'VivoCity', 'Changi Airport', 'Jurong Point', 'Bugis Junction',
+  'Toa Payoh HDB Hub', 'Singapore General Hospital', 'Marina Bay Sands',
+];
+
 export function HomePage() {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [preferShelter, setPreferShelter] = useState(false);
   const [contact, setContact] = useState(() => localStorage.getItem('nextOfKin') ?? '');
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
   const { fetchRoute, loading, error } = useRoute();
   const navigate = useNavigate();
 
@@ -42,11 +49,18 @@ export function HomePage() {
       <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>{t.appName}</h1>
       <p style={{ color: '#6b7280', marginBottom: 28 }}>{t.tagline}</p>
 
+      <datalist id="places">
+        {COMMON_PLACES.map((p) => (
+          <option key={p} value={p} />
+        ))}
+      </datalist>
+
       <label style={labelStyle}>{t.startingFrom}</label>
       <input
         value={origin}
         onChange={(e) => setOrigin(e.target.value)}
         placeholder={t.originPlaceholder}
+        list="places"
         style={inputStyle}
       />
 
@@ -66,19 +80,18 @@ export function HomePage() {
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
         placeholder={t.destinationPlaceholder}
+        list="places"
         style={inputStyle}
       />
 
       <label style={labelStyle}>{t.language}</label>
-      <select
-        value={language}
-        onChange={(e) => setLanguage(e.target.value as Language)}
-        style={inputStyle}
+      <button
+        type="button"
+        onClick={() => navigate('/language')}
+        style={{ ...inputStyle, textAlign: 'left', cursor: 'pointer', background: '#fff' }}
       >
-        {LANGUAGES.map((l) => (
-          <option key={l.value} value={l.value}>{l.label}</option>
-        ))}
-      </select>
+        {LANGUAGES.find((l) => l.value === language)?.label ?? language} ▸
+      </button>
 
       <label style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0 24px', cursor: 'pointer' }}>
         <input
