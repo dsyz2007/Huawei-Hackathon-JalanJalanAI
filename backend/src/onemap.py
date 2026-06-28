@@ -10,6 +10,23 @@ ONEMAP_BASE = "https://www.onemap.gov.sg"
 _token_cache = {"token": None, "expires_at": 0.0}
 
 
+@dataclass
+class GeocodeResult:
+    name: str
+    lat: float
+    lng: float
+    source: str   # "onemap" or "gazetteer" (fallback if no onemap)
+
+
+@dataclass
+class RouteResult:
+    points: list[tuple[float, float]]   # the path as a list of (lat, lng)
+    instructions: list                  # turn-by-turn from OneMap (empty for synthetic)
+    total_distance_m: float
+    total_time_s: float
+    source: str                         # "onemap" or "synthetic"
+
+
 def _get_token() -> str | None:
     if not config.has_onemap():
         return None
@@ -69,14 +86,6 @@ def _onemap_route(start: GeocodeResult, end: GeocodeResult, prefer_shelter: bool
 
 
 
-@dataclass
-class GeocodeResult:
-    name: str
-    lat: float
-    lng: float
-    source: str   # "onemap" or "gazetteer" (fallback if no onemap)
-
-
 def _onemap_geocode(query: str) -> GeocodeResult | None:
     token = _get_token()
     if token is None:
@@ -115,15 +124,6 @@ def geocode(query: str) -> GeocodeResult | None:
     lat, lng = coords
     return GeocodeResult(name=query.strip(), lat=lat, lng=lng, source="gazetteer")
 
-
-
-@dataclass
-class RouteResult:
-    points: list[tuple[float, float]]   # the path as a list of (lat, lng)
-    instructions: list                  # turn-by-turn from OneMap (empty for synthetic)
-    total_distance_m: float
-    total_time_s: float
-    source: str                         # "onemap" or "synthetic"
 
 
 def _haversine_m(a: tuple[float, float], b: tuple[float, float]) -> float:

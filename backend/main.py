@@ -8,6 +8,7 @@ from backend.src import checkpoints
 from backend.src import orchestrator
 from backend.src import overpass
 from backend.src import ranking
+from backend.src import gemini
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -129,3 +130,20 @@ def rank_debug(lat: float, lng: float):
 @app.get("/onemap-token-debug")
 def onemap_token_debug():
     return {"got_token": bool(onemap._get_token())}
+
+
+@app.get("/gemini-debug")
+def gemini_debug(language: str = "english"):
+    sample = [
+        {"step": 1, "action": "exit_mrt", "candidates": [
+            {"index": 0, "name": "Bedok MRT Exit B", "type": "subway entrance", "dist_m": 10},
+            {"index": 1, "name": "7-Eleven", "type": "shop", "dist_m": 25},
+        ]},
+        {"step": 2, "action": "arrive", "candidates": [
+            {"index": 0, "name": "Bedok Interchange", "type": "bus station", "dist_m": 15},
+        ]},
+    ]
+    decision = gemini.decide_route(sample, language, prefer_shelter=False)
+    if decision is None:
+        return {"ok": False, "reason": "no key, package missing, or Gemini failed"}
+    return {"ok": True, "steps": [d.model_dump() for d in decision]}
