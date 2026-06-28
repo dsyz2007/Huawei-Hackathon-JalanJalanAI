@@ -1,6 +1,35 @@
 import math
+import time
+import requests
 from dataclasses import dataclass
 from backend.src import gazetteer, config
+
+
+ONEMAP_BASE = "https://www.onemap.gov.sg"
+_token_cache = {"token": None, "expires_at": 0.0}
+
+
+def _get_token() -> str | None:
+    if not config.has_onemap():
+        return None
+    now = time.time()
+    if _token_cache["token"] and now < _token_cache["expires_at"]:
+        return _token_cache["token"]   # reuse cached token
+    try:
+        resp = requests.post(
+            f"{ONEMAP_BASE}/api/auth/post/getToken",
+            json={"email": config.ONEMAP_EMAIL, "password": config.ONEMAP_PASSWORD},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+    except (requests.RequestException, ValueError):
+        return None
+    token = data.get("access_token")
+    if token:
+        _token_cache["token"] = token
+        _token_cache["expires_at"] = now + 2 * 24 * 3600   # token lasts ~3 days; refresh after 2
+    return token
 
 
 @dataclass
@@ -11,14 +40,44 @@ class GeocodeResult:
     source: str   # "onemap" or "gazetteer" (fallback if no onemap)
 
 
+def _onemap_geocode(query: str) -> GeocodeResult | None:
+    token = _get_token()
+    if token is None:
+        return None
+    try:
+        resp = requests.get(
+            f"{ONEMAP_BASE}/api/common/elastic/search",
+            params={"searchVal": query, "returnGeom": "Y", "getAddrDetails": "Y", "pageNum": 1},
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+    except (requests.RequestException, ValueError):
+        return None
+    results = data.get("results") or []
+    if not results:
+        return None
+    top = results[0]
+    try:
+        lat, lng = float(top["LATITUDE"]), float(top["LONGITUDE"])
+    except (KeyError, ValueError, TypeError):
+        return None
+    return GeocodeResult(name=top.get("SEARCHVAL") or query.strip(), lat=lat, lng=lng, source="onemap")
+
+
 def geocode(query: str) -> GeocodeResult | None:
-    # Lesson 10: live OneMap search will go here (when we have a key)
-    # For now, we use the temporary built-in gazetteer for testing
+    if config.has_onemap():
+        result = _onemap_geocode(query)
+        if result is not None:
+            return result
+    # fallback: built-in gazetteer (used when no keys, or OneMap fails)
     coords = gazetteer.lookup(query)
-    if coords is None: # handle edge case of unable to find location name given in query
+    if coords is None:
         return None
     lat, lng = coords
     return GeocodeResult(name=query.strip(), lat=lat, lng=lng, source="gazetteer")
+
 
 
 @dataclass

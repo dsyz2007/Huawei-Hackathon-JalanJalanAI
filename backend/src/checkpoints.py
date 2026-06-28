@@ -3,6 +3,13 @@ from backend.src.models import Checkpoint, Action
 from backend.src.onemap import RouteResult, _haversine_m
 
 
+def round_to_5(metres: float) -> int:
+    m = round(metres)
+    if m <= 0:
+        return 0
+    return max(5, round(m / 5) * 5)   # nearest 5, but never a tiny non-zero like 2m
+
+
 def _bearing(a: tuple[float, float], b: tuple[float, float]) -> float:
     """Compass direction of travel from point a to point b. 0=N, 90=E, 180=S, 270=W."""
     lat1, lng1 = math.radians(a[0]), math.radians(a[1])
@@ -86,7 +93,7 @@ def extract_checkpoints(
                 action=action,
                 lat=lat,
                 lng=lng,
-                distance=round(cumdist[idx]),
+                distance=round_to_5(cumdist[idx]),
                 bearing=round(bearings[min(idx, len(bearings) - 1)]),
             )
         )

@@ -124,3 +124,8 @@ def rank_debug(lat: float, lng: float):
             for f, s in scored
         ]
     }
+
+
+@app.get("/onemap-token-debug")
+def onemap_token_debug():
+    return {"got_token": bool(onemap._get_token())}

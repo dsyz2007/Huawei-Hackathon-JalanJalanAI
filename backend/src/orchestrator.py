@@ -6,10 +6,10 @@ from dataclasses import replace
 
 
 def _format_distance(metres: float) -> str:
-    metres = round(metres)
-    if metres >= 1000:
-        return f"{metres / 1000:.1f}km"
-    return f"{metres}m"
+    m = checkpoints.round_to_5(metres)
+    if m >= 1000:
+        return f"{m / 1000:.1f}km"
+    return f"{m}m"
 
 
 def _format_duration(seconds: float) -> str:
@@ -31,7 +31,7 @@ def _category_name(tags: dict) -> str:
 
 def _to_landmark(feature: overpass.OsmFeature) -> Landmark:
     name = feature.name or _category_name(feature.tags)
-    return Landmark(name=name, description=f"About {round(feature.dist_m)}m away")
+    return Landmark(name=name, description=f"About {checkpoints.round_to_5(feature.dist_m)}m away")
 
 
 def _pick_landmark(features, action, prefer_shelter: bool) -> Landmark | None:
