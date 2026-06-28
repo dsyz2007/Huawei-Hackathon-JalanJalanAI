@@ -1,0 +1,52 @@
+:root {
+  --brand-1: #2563eb;
+  --brand-2: #7c3aed;
+  --brand-3: #db2777;
+  --ink: #111827;
+  --muted: #6b7280;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, #eef2ff 0%, #faf5ff 45%, #fdf2f8 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root { width: 100%; min-height: 100vh; }
+
+img { max-width: 100%; }
+
+/* prettier scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.35); border-radius: 8px; }
+
+/* all controls inherit the app font */
+button, input, select, textarea { font-family: inherit; }
+
+/* global button polish — works even with the components' inline styles */
+button { transition: transform 0.12s ease, box-shadow 0.15s ease, filter 0.12s ease, opacity 0.12s ease; }
+button:not(:disabled):hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(17, 24, 39, 0.14); }
+button:not(:disabled):active { transform: translateY(1px) scale(0.99); }
+button:disabled { cursor: not-allowed; }
+
+/* focus ring for inputs / selects */
+input:focus, select:focus {
+  border-color: var(--brand-2) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+}
+
+/* gentle fade-in on each screen */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+#root > * { animation: fadeUp 0.28s ease both; }

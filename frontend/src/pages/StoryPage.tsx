@@ -121,7 +121,7 @@ export function StoryPage() {
 
   return (
     <div
-      style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', minHeight: '100dvh', display: 'flex', flexDirection: 'column', userSelect: 'none', touchAction: 'pan-y' }}
+      style={{ maxWidth: 480, margin: '0 auto', minHeight: '100dvh', display: 'flex', flexDirection: 'column', userSelect: 'none', touchAction: 'pan-y' }}
       {...swipeHandlers}
     >
       <div style={{ padding: '16px 20px 8px' }}>
@@ -192,7 +192,7 @@ export function StoryPage() {
         ) : (
           <button
             onClick={next}
-            style={{ flex: 1, minHeight: 56, padding: '13px', borderRadius: 10, border: 'none', background: '#2563eb', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
+            style={{ flex: 1, minHeight: 56, padding: '13px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}
           >
             {t.next}
           </button>

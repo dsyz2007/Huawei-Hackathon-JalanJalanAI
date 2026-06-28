@@ -27,7 +27,7 @@ export function RoutePage() {
   }
 
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', paddingBottom: 100 }}>
+    <div style={{ maxWidth: 480, margin: '0 auto', paddingBottom: 100 }}>
       <div style={{ padding: '20px 20px 0' }}>
         <button
           onClick={() => navigate('/')}
@@ -35,10 +35,12 @@ export function RoutePage() {
         >
           {t.back}
         </button>
-        <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700 }}>{t.yourRoute}</h2>
-        <p style={{ color: '#6b7280', margin: '0 0 16px', fontSize: 14 }}>
-          {route.distance} · {route.duration} · {route.steps.length} 📍
-        </p>
+        <div style={{ background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 60%, #db2777 100%)', color: '#fff', borderRadius: 16, padding: '18px 20px', margin: '0 0 16px', boxShadow: '0 6px 20px rgba(37,99,235,0.25)' }}>
+          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>{t.yourRoute}</h2>
+          <p style={{ opacity: 0.92, margin: '6px 0 0', fontSize: 14 }}>
+            {route.distance} · {route.duration} · {route.steps.length} 📍
+          </p>
+        </div>
         <ProgressTracker current={currentStep + 1} total={route.steps.length} />
       </div>
 
@@ -68,7 +70,7 @@ export function RoutePage() {
             minHeight: 48,
             padding: '14px',
             borderRadius: 10,
-            background: '#2563eb',
+            background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
             color: '#fff',
             border: 'none',
             fontSize: 17,

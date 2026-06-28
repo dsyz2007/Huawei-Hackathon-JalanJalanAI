@@ -49,7 +49,7 @@ export function HomePage() {
   const currentLangLabel = LANGUAGES.find((l) => l.value === language)?.label ?? language;
 
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', padding: '20px 20px 40px', fontFamily: 'sans-serif' }}>
+    <div style={{ maxWidth: 480, margin: '0 auto', padding: '20px 20px 40px' }}>
       <div style={headerStyle}>
         <h1 style={{ fontSize: 28, fontWeight: 800, margin: 0 }}>🧭 {t.appName}</h1>
         <p style={{ opacity: 0.92, margin: '6px 0 0', fontSize: 15 }}>{t.tagline}</p>
