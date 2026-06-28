@@ -3,6 +3,10 @@ from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
 from dataclasses import replace
 
+# Cap how many landmark candidates we hand Gemini per checkpoint. Keeps the prompt
+# small and fast, and avoids hitting the free-tier token-per-minute rate limit.
+MAX_CANDIDATES = 10
+
 
 
 def _format_distance(metres: float) -> str:
@@ -63,7 +67,10 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
     cps = checkpoints.extract_checkpoints(route_result, checkpoints.looks_like_mrt(origin))
 
     all_features = overpass.landmarks_for_points([(cp.lat, cp.lng) for cp in cps])
-    features_per_cp = [_features_near(cp, all_features) for cp in cps]
+    features_per_cp = [
+        sorted(_features_near(cp, all_features), key=lambda f: f.dist_m)[:MAX_CANDIDATES]
+        for cp in cps
+    ]
 
     steps = _build_steps(cps, features_per_cp, language, origin, destination, prefer_shelter)
 
@@ -89,7 +96,7 @@ def _build_steps(cps, features_per_cp, language, origin, destination, prefer_she
         }
         for i, (cp, feats) in enumerate(zip(cps, features_per_cp), start=1)
     ]
-    decision = gemini.decide_route(payload, language, prefer_shelter)
+    decision = gemini.decide_route(payload, language, prefer_shelter, origin, destination)
     by_step = {d.step: d for d in decision} if decision else {}
 
     steps = []
