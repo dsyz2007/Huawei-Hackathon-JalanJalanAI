@@ -4,6 +4,7 @@ import { useRoute } from '../hooks/useRoute';
 import { getDemoRoute, DEMO_ROUTES, type DemoRouteId } from '../services/demoRouteService';
 import { useLanguage } from '../context/LanguageContext';
 import type { Language } from '../types';
+import { localizedPlaces, resolvePlace } from '../utils/places';
 
 const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'english', label: 'English' },
@@ -15,13 +16,6 @@ const LANGUAGES: { value: Language; label: string }[] = [
   { value: 'malay', label: 'Melayu' },
   { value: 'tamil', label: 'தமிழ்' },
   { value: 'hindi', label: 'हिन्दी' },
-];
-
-const COMMON_PLACES = [
-  'Bedok MRT', 'Tampines MRT', 'Ang Mo Kio MRT', 'Jurong East MRT', 'Orchard MRT',
-  'Bishan MRT', 'Woodlands MRT', 'Bedok Interchange', 'Tampines Mall', 'AMK Hub',
-  'ION Orchard', 'VivoCity', 'Changi Airport', 'Jurong Point', 'Bugis Junction',
-  'Toa Payoh HDB Hub', 'Singapore General Hospital', 'Marina Bay Sands',
 ];
 
 const DEMO_COLORS = ['#fef3c7', '#dbeafe', '#dcfce7'];
@@ -37,7 +31,12 @@ export function HomePage() {
 
   async function handleGenerate() {
     if (!origin.trim() || !destination.trim()) return;
-    const result = await fetchRoute({ origin, destination, language, preferShelter });
+    const result = await fetchRoute({
+      origin: resolvePlace(origin),
+      destination: resolvePlace(destination),
+      language,
+      preferShelter,
+    });
     if (result) navigate('/route', { state: { route: result } });
   }
 
@@ -66,8 +65,8 @@ export function HomePage() {
       </button>
 
       <datalist id="places">
-        {COMMON_PLACES.map((p) => (
-          <option key={p} value={p} />
+        {localizedPlaces(language).map((p) => (
+          <option key={p.canonical} value={p.value} />
         ))}
       </datalist>
 
