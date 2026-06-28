@@ -81,3 +81,43 @@ def nearby_landmarks(lat: float, lng: float, radii=(60, 150)) -> list[OsmFeature
             _cache[key] = features          # remember successes
             return features
     return []                               # don't cache failures, so retries can still succeed
+
+
+
+# Batched Query Optimisation (1 Overpass Call per route to reduce chances of too busy errors due to less calls made)
+_multi_cache: dict = {}
+
+def _build_multi_query(points: list[tuple[float, float]], radius: int) -> str:
+    parts = []
+    for lat, lng in points:
+        around = f"around:{radius},{lat},{lng}"
+        parts += [
+            f'  node({around})[railway=subway_entrance];',
+            f'  node({around})[highway=bus_stop];',
+            f'  node({around})[amenity~"^(atm|bank|post_box|clinic|hospital|pharmacy|place_of_worship|shelter|bus_station)$"];',
+            f'  node({around})[shop][name];',
+        ]
+    body = "\n".join(parts)
+    return f"[out:json][timeout:25];\n(\n{body}\n);\nout body;"
+
+
+def landmarks_for_points(points: list[tuple[float, float]], radius: int = 150) -> list[OsmFeature]:
+    if not points:
+        return []
+    key = tuple(sorted((round(la, 4), round(ln, 4)) for la, ln in points))
+    if key in _multi_cache:
+        return _multi_cache[key]
+
+    ql = _build_multi_query(points, radius)
+    for url in OVERPASS_URLS:
+        try:
+            resp = requests.post(url, data={"data": ql}, headers=HEADERS, timeout=25)
+            if resp.status_code in (429, 504):
+                continue
+            resp.raise_for_status()
+            features = _parse(resp.json(), 0.0, 0.0)   # dist_m is recomputed per checkpoint later
+            _multi_cache[key] = features
+            return features
+        except (requests.RequestException, ValueError):
+            continue
+    return []

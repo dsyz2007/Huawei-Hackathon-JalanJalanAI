@@ -1,6 +1,8 @@
 import uuid
 from backend.src import onemap, checkpoints, glossary, overpass, ranking
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
+from dataclasses import replace
+
 
 
 def _format_distance(metres: float) -> str:
@@ -42,6 +44,15 @@ def _pick_landmark(features, action, prefer_shelter: bool) -> Landmark | None:
     return landmark
 
 
+def _features_near(cp, all_features, radius: float = 150.0):
+    near = []
+    for f in all_features:
+        d = onemap._haversine_m((cp.lat, cp.lng), (f.lat, f.lng))
+        if d <= radius:
+            near.append(replace(f, dist_m=d))   # a copy of f with dist_m set for THIS checkpoint
+    return near
+
+
 def build_route(origin: str, destination: str, language: str, prefer_shelter: bool) -> RouteResponse | None:
     start = onemap.geocode(origin)
     end = onemap.geocode(destination)
@@ -51,9 +62,14 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
     route_result = onemap.route(start, end, prefer_shelter)
     cps = checkpoints.extract_checkpoints(route_result, checkpoints.looks_like_mrt(origin))
 
+    # ONE Overpass call for every checkpoint at once
+    coords = [(cp.lat, cp.lng) for cp in cps]
+    all_features = overpass.landmarks_for_points(coords)
+
     steps = []
     for i, cp in enumerate(cps, start=1):
-        landmark = _pick_landmark(overpass.nearby_landmarks(cp.lat, cp.lng), cp.action, prefer_shelter)
+        near = _features_near(cp, all_features)
+        landmark = _pick_landmark(near, cp.action, prefer_shelter)
         text, audio = glossary.phrase(
             cp.action, language,
             origin=origin, destination=destination,
