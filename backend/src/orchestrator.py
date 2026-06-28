@@ -1,5 +1,5 @@
 import uuid
-from backend.src import onemap, checkpoints, glossary, overpass, ranking
+from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
 from dataclasses import replace
 
@@ -62,27 +62,10 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
     route_result = onemap.route(start, end, prefer_shelter)
     cps = checkpoints.extract_checkpoints(route_result, checkpoints.looks_like_mrt(origin))
 
-    # ONE Overpass call for every checkpoint at once
-    coords = [(cp.lat, cp.lng) for cp in cps]
-    all_features = overpass.landmarks_for_points(coords)
+    all_features = overpass.landmarks_for_points([(cp.lat, cp.lng) for cp in cps])
+    features_per_cp = [_features_near(cp, all_features) for cp in cps]
 
-    steps = []
-    for i, cp in enumerate(cps, start=1):
-        near = _features_near(cp, all_features)
-        landmark = _pick_landmark(near, cp.action, prefer_shelter)
-        text, audio = glossary.phrase(
-            cp.action, language,
-            origin=origin, destination=destination,
-            landmark=landmark.name if landmark else None,
-        )
-        steps.append(
-            RouteStep(
-                step=i,
-                checkpoint=cp,
-                landmark=landmark,
-                instruction=Instruction(text=text, audio_text=audio, language=language),
-            )
-        )
+    steps = _build_steps(cps, features_per_cp, language, origin, destination, prefer_shelter)
 
     return RouteResponse(
         route_id="rt-" + uuid.uuid4().hex[:8],
@@ -90,3 +73,37 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
         duration=_format_duration(route_result.total_time_s),
         steps=steps,
     )
+
+
+def _build_steps(cps, features_per_cp, language, origin, destination, prefer_shelter):
+    # Hand real candidates to the Gemini engine
+    payload = [
+        {
+            "step": i,
+            "action": cp.action.value,
+            "candidates": [
+                {"index": j, "name": f.name or _category_name(f.tags),
+                 "type": _category_name(f.tags), "dist_m": checkpoints.round_to_5(f.dist_m)}
+                for j, f in enumerate(feats)
+            ],
+        }
+        for i, (cp, feats) in enumerate(zip(cps, features_per_cp), start=1)
+    ]
+    decision = gemini.decide_route(payload, language, prefer_shelter)
+    by_step = {d.step: d for d in decision} if decision else {}
+
+    steps = []
+    for i, (cp, feats) in enumerate(zip(cps, features_per_cp), start=1):
+        d = by_step.get(i)
+        if d and 0 <= d.chosen_index < len(feats):           # Gemini engine path
+            landmark = _to_landmark(feats[d.chosen_index])
+            landmark.salience_score = round(d.confidence, 2)
+            text, audio = d.instruction_text, d.instruction_audio
+        else:                                                # deterministic fallback
+            landmark = _pick_landmark(feats, cp.action, prefer_shelter)
+            text, audio = glossary.phrase(cp.action, language, origin=origin,
+                                          destination=destination,
+                                          landmark=landmark.name if landmark else None)
+        steps.append(RouteStep(step=i, checkpoint=cp, landmark=landmark,
+                               instruction=Instruction(text=text, audio_text=audio, language=language)))
+    return steps
