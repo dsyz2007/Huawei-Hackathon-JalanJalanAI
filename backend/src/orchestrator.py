@@ -1,5 +1,5 @@
 import uuid
-from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini
+from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini, config
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
 from dataclasses import replace
 
@@ -39,7 +39,18 @@ def _category_name(tags: dict) -> str:
 
 def _to_landmark(feature: overpass.OsmFeature) -> Landmark:
     name = feature.name or _category_name(feature.tags)
-    return Landmark(name=name, description=f"About {checkpoints.round_to_5(feature.dist_m)}m away")
+    image_url = None
+    if config.has_maps():
+        # real street-level photo of the actual spot (Google Street View Static API)
+        image_url = (
+            "https://maps.googleapis.com/maps/api/streetview"
+            f"?size=600x240&location={feature.lat},{feature.lng}&fov=80&key={config.GOOGLE_MAPS_KEY}"
+        )
+    return Landmark(
+        name=name,
+        description=f"About {checkpoints.round_to_5(feature.dist_m)}m away",
+        image_url=image_url,
+    )
 
 
 def _pick_landmark(features, action, prefer_shelter: bool) -> Landmark | None:

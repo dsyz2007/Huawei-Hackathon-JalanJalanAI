@@ -40,7 +40,7 @@ app.add_middleware(
 
 @app.get('/health')
 def health():
-    return {"ok" : True, "onemap": config.has_onemap(), "gemini": config.has_gemini()}
+    return {"ok" : True, "onemap": config.has_onemap(), "gemini": config.has_gemini(), "maps": config.has_maps()}
 
 
 @app.post("/route", response_model=RouteResponse)
