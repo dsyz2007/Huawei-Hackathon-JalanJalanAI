@@ -3,6 +3,22 @@ import { useLanguage } from '../context/LanguageContext';
 import { getTranslatedLandmark } from '../utils/landmarks';
 import type { RouteStep, Language } from '../types';
 
+function landmarkEmoji(name: string | undefined, action: string): string {
+  const n = (name ?? '').toLowerCase();
+  if (action === 'exit_mrt' || n.includes('mrt') || n.includes('station')) return '🚇';
+  if (n.includes('bus')) return '🚌';
+  if (n.includes('atm') || n.includes('bank')) return '🏧';
+  if (n.includes('mall') || n.includes('shopping') || n.includes('hub')) return '🏬';
+  if (n.includes('clinic') || n.includes('hospital') || n.includes('pharmacy') || n.includes('polyclinic')) return '🏥';
+  if (n.includes('post')) return '📮';
+  if (n.includes('kopitiam') || n.includes('coffee') || n.includes('cafe') || n.includes('food') || n.includes('hawker')) return '☕';
+  if (n.includes('school')) return '🏫';
+  if (n.includes('park') || n.includes('garden')) return '🌳';
+  if (n.includes('temple') || n.includes('church') || n.includes('mosque')) return '🛕';
+  if (action === 'arrive') return '🏁';
+  return '📍';
+}
+
 interface Props {
   step: RouteStep;
   language: Language;
@@ -50,10 +66,10 @@ export function StoryCard({ step, language, distanceToCheckpoint, direction }: P
             alignItems: 'center',
             justifyContent: 'center',
             color: '#94a3b8',
-            fontSize: 48,
+            fontSize: 88,
           }}
         >
-          📍
+          {landmarkEmoji(landmark?.name, checkpoint.action)}
         </div>
       )}
 

@@ -49,6 +49,17 @@ export function HomePage() {
         style={inputStyle}
       />
 
+      <div style={{ textAlign: 'center', margin: '-6px 0 6px' }}>
+        <button
+          type="button"
+          onClick={() => { setOrigin(destination); setDestination(origin); }}
+          aria-label="Swap start and destination"
+          style={swapBtnStyle}
+        >
+          ⇅
+        </button>
+      </div>
+
       <label style={labelStyle}>{t.goingTo}</label>
       <input
         value={destination}
@@ -129,6 +140,16 @@ const inputStyle: React.CSSProperties = {
   marginBottom: 16,
   boxSizing: 'border-box',
   outline: 'none',
+};
+
+const swapBtnStyle: React.CSSProperties = {
+  minHeight: 40,
+  minWidth: 40,
+  borderRadius: 20,
+  border: '1px solid #d1d5db',
+  background: '#fff',
+  fontSize: 18,
+  cursor: 'pointer',
 };
 
 function btnStyle(bg: string): React.CSSProperties {
