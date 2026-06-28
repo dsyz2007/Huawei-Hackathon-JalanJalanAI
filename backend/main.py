@@ -1,10 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from backend.src import demo_data
 from backend.src import init_db
 from backend.src import config
 from backend.src import onemap
 from backend.src import checkpoints
+from backend.src import orchestrator
+from backend.src import overpass
+from backend.src import ranking
 from backend.src.models import (
     Action,
     RouteRequest,
@@ -37,29 +40,12 @@ def health():
     return {"ok" : True, "onemap": config.has_onemap(), "gemini": config.has_gemini()}
 
 
-@app.post('/route', response_model=RouteResponse)
+@app.post("/route", response_model=RouteResponse)
 def route(req: RouteRequest):
-    return RouteResponse(
-        route_id = "rt-demo",
-        distance = "650m",
-        duration = "8 min",
-        steps = [
-            RouteStep(
-                step=1,
-                checkpoint=Checkpoint(
-                    id = "S1", action = Action.exit_mrt, lat = 1.3236, lng = 103.93, distance = 0                   
-                ),
-                landmark=Landmark(
-                    name = "Bedok MRT Exit B", description = "Blue MRT sign above the exit"
-                ),
-                instruction=Instruction(
-                    text = f"Exit at {req.origin}.",
-                    audio_text = "Exit here.",
-                    language = req.language
-                )
-            )
-        ]
-    )
+    result = orchestrator.build_route(req.origin, req.destination, req.language, req.prefer_shelter)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Could not find that origin or destination.")
+    return result
 
 
 @app.post('/demo-route', response_model=RouteResponse)
@@ -108,3 +94,33 @@ def checkpoints_debug(origin: str, destination: str):
     result = onemap.route(start, end)
     cps = checkpoints.extract_checkpoints(result, checkpoints.looks_like_mrt(origin))
     return {"found": True, "count": len(cps), "checkpoints": cps}
+
+
+@app.get("/landmarks-debug")
+def landmarks_debug(lat: float, lng: float):
+    features = overpass.nearby_landmarks(lat, lng)
+    return {
+        "count": len(features),
+        "landmarks": [{"name": f.name, "dist_m": round(f.dist_m), "tags": f.tags} for f in features],
+    }
+
+
+@app.get("/rank-debug")
+def rank_debug(lat: float, lng: float):
+    features = overpass.nearby_landmarks(lat, lng)
+    scored = sorted(
+        ((f, ranking.score_feature(f, Action.go_straight, features)) for f in features),
+        key=lambda p: p[1],
+        reverse=True,
+    )
+    return {
+        "ranked": [
+            {
+                "name": f.name or "(unnamed)",
+                "category": ranking._category_key(f.tags),
+                "dist_m": round(f.dist_m),
+                "score": s,
+            }
+            for f, s in scored
+        ]
+    }
