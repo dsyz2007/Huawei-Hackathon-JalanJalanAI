@@ -1,5 +1,5 @@
 import uuid
-from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini, config
+from backend.src import onemap, checkpoints, glossary, overpass, ranking, gemini, config, mapillary
 from backend.src.models import RouteResponse, RouteStep, Instruction, Landmark
 from dataclasses import replace
 
@@ -39,9 +39,10 @@ def _category_name(tags: dict) -> str:
 
 def _to_landmark(feature: overpass.OsmFeature) -> Landmark:
     name = feature.name or _category_name(feature.tags)
-    image_url = None
-    if config.has_maps():
-        # real street-level photo of the actual spot (Google Street View Static API)
+    # Prefer a real Mapillary street photo (free, no card); fall back to Google Street
+    # View if a Maps key is set; otherwise None -> the frontend shows a category icon.
+    image_url = mapillary.image_url_near(feature.lat, feature.lng)
+    if image_url is None and config.has_maps():
         image_url = (
             "https://maps.googleapis.com/maps/api/streetview"
             f"?size=600x240&location={feature.lat},{feature.lng}&fov=80&key={config.GOOGLE_MAPS_KEY}"

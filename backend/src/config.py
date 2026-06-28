@@ -13,6 +13,7 @@ ONEMAP_PASSWORD = os.getenv("ONEMAP_PASSWORD")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
 GOOGLE_MAPS_KEY = os.getenv("GOOGLE_MAPS_KEY")
+MAPILLARY_TOKEN = os.getenv("MAPILLARY_TOKEN")
 
 
 def has_onemap() -> bool:
@@ -23,4 +24,7 @@ def has_gemini() -> bool:
 
 def has_maps() -> bool:
     return bool(GOOGLE_MAPS_KEY)
+
+def has_mapillary() -> bool:
+    return bool(MAPILLARY_TOKEN)
 
