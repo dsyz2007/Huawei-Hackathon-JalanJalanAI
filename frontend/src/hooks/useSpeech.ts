@@ -94,7 +94,7 @@ export function useSpeech() {
     setPaused(false);
   }, []);
 
-  const speak = useCallback(async (text: string, language: Language = 'en') => {
+  const speak = useCallback(async (text: string, language: Language = 'english') => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     if (timerRef.current) clearTimeout(timerRef.current);

@@ -1,5 +1,6 @@
 export type Language = 'english' | 'singlish' | 'cantonese' | 'teochew' | 'hokkien' | 'chinese' | 'malay' | 'tamil' | 'hindi';
 
+
 export interface Checkpoint {
   id: string;
   action: 'turn_left' | 'turn_right' | 'go_straight' | 'cross_road' | 'exit_mrt' | 'arrive';
