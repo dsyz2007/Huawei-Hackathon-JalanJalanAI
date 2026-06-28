@@ -37,7 +37,7 @@ export function RoutePage() {
         </button>
         <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700 }}>{t.yourRoute}</h2>
         <p style={{ color: '#6b7280', margin: '0 0 16px', fontSize: 14 }}>
-          {route.distance} · {route.duration}
+          {route.distance} · {route.duration} · {route.steps.length} 📍
         </p>
         <ProgressTracker current={currentStep + 1} total={route.steps.length} />
       </div>
