@@ -61,12 +61,11 @@ export function StoryCard({ step, language, distanceToCheckpoint, direction }: P
           style={{
             width: '100%',
             height: 220,
-            background: '#f1f5f9',
+            background: 'linear-gradient(135deg, #dbeafe 0%, #ede9fe 55%, #fce7f3 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#94a3b8',
-            fontSize: 88,
+            fontSize: 96,
           }}
         >
           {landmarkEmoji(landmark?.name, checkpoint.action)}

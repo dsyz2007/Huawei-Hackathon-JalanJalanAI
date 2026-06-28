@@ -24,6 +24,8 @@ const COMMON_PLACES = [
   'Toa Payoh HDB Hub', 'Singapore General Hospital', 'Marina Bay Sands',
 ];
 
+const DEMO_COLORS = ['#fef3c7', '#dbeafe', '#dcfce7'];
+
 export function HomePage() {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -44,10 +46,24 @@ export function HomePage() {
     navigate('/route', { state: { route: result } });
   }
 
+  const currentLangLabel = LANGUAGES.find((l) => l.value === language)?.label ?? language;
+
   return (
-    <div style={{ maxWidth: 480, margin: '0 auto', padding: '32px 20px', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>{t.appName}</h1>
-      <p style={{ color: '#6b7280', marginBottom: 28 }}>{t.tagline}</p>
+    <div style={{ maxWidth: 480, margin: '0 auto', padding: '20px 20px 40px', fontFamily: 'sans-serif' }}>
+      <div style={headerStyle}>
+        <h1 style={{ fontSize: 28, fontWeight: 800, margin: 0 }}>🧭 {t.appName}</h1>
+        <p style={{ opacity: 0.92, margin: '6px 0 0', fontSize: 15 }}>{t.tagline}</p>
+      </div>
+
+      {/* Language selector at the very top */}
+      <label style={labelStyle}>{t.language}</label>
+      <button
+        type="button"
+        onClick={() => navigate('/language')}
+        style={{ ...inputStyle, textAlign: 'left', cursor: 'pointer', background: '#fff' }}
+      >
+        🌏 {currentLangLabel} ▸
+      </button>
 
       <datalist id="places">
         {COMMON_PLACES.map((p) => (
@@ -84,23 +100,14 @@ export function HomePage() {
         style={inputStyle}
       />
 
-      <label style={labelStyle}>{t.language}</label>
-      <button
-        type="button"
-        onClick={() => navigate('/language')}
-        style={{ ...inputStyle, textAlign: 'left', cursor: 'pointer', background: '#fff' }}
-      >
-        {LANGUAGES.find((l) => l.value === language)?.label ?? language} ▸
-      </button>
-
-      <label style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0 24px', cursor: 'pointer' }}>
+      <label style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0 20px', cursor: 'pointer' }}>
         <input
           type="checkbox"
           checked={preferShelter}
           onChange={(e) => setPreferShelter(e.target.checked)}
           style={{ width: 18, height: 18 }}
         />
-        <span style={{ fontSize: 15 }}>{t.preferShelter}</span>
+        <span style={{ fontSize: 15 }}>☂️ {t.preferShelter}</span>
       </label>
 
       <label style={labelStyle}>📞 {t.callLovedOne}</label>
@@ -112,18 +119,27 @@ export function HomePage() {
         style={inputStyle}
       />
 
-      {error && <p style={{ color: '#ef4444', marginBottom: 12 }}>{t.errorGenerating}</p>}
+      {error && (
+        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: '12px 14px', marginBottom: 14 }}>
+          <p style={{ color: '#b91c1c', margin: 0, fontSize: 14, fontWeight: 700 }}>{t.errorGenerating}</p>
+          <p style={{ color: '#9ca3af', margin: '4px 0 0', fontSize: 13 }}>
+            Try a nearby MRT, mall, or 6-digit postal code — e.g. “Bedok MRT”, “Tampines Mall”, “238801”.
+          </p>
+        </div>
+      )}
 
       <button
         onClick={handleGenerate}
         disabled={loading || !origin.trim() || !destination.trim()}
         style={{
-          ...btnStyle('#2563eb'),
+          ...btnStyle,
           width: '100%',
+          background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+          color: '#fff',
           opacity: loading || !origin.trim() || !destination.trim() ? 0.5 : 1,
         }}
       >
-        {loading ? t.generating : t.generateRoute}
+        {loading ? t.generating : `🚶 ${t.generateRoute}`}
       </button>
 
       <p style={{ textAlign: 'center', color: '#9ca3af', margin: '24px 0 12px', fontSize: 13 }}>
@@ -131,11 +147,11 @@ export function HomePage() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {(Object.keys(DEMO_ROUTES) as DemoRouteId[]).map((id) => (
+        {(Object.keys(DEMO_ROUTES) as DemoRouteId[]).map((id, i) => (
           <button
             key={id}
             onClick={() => handleDemo(id)}
-            style={{ ...btnStyle('#f1f5f9'), color: '#374151', fontSize: 14 }}
+            style={{ ...btnStyle, background: DEMO_COLORS[i % DEMO_COLORS.length], color: '#374151', fontSize: 14 }}
           >
             {t.demoRoutes[id]}
           </button>
@@ -144,6 +160,15 @@ export function HomePage() {
     </div>
   );
 }
+
+const headerStyle: React.CSSProperties = {
+  background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 60%, #db2777 100%)',
+  color: '#fff',
+  borderRadius: 16,
+  padding: '22px',
+  marginBottom: 22,
+  boxShadow: '0 6px 20px rgba(37,99,235,0.25)',
+};
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
@@ -175,16 +200,12 @@ const swapBtnStyle: React.CSSProperties = {
   cursor: 'pointer',
 };
 
-function btnStyle(bg: string): React.CSSProperties {
-  return {
-    minHeight: 48,
-    padding: '14px 20px',
-    borderRadius: 10,
-    background: bg,
-    color: bg === '#2563eb' ? '#fff' : undefined,
-    border: 'none',
-    fontSize: 16,
-    fontWeight: 600,
-    cursor: 'pointer',
-  };
-}
+const btnStyle: React.CSSProperties = {
+  minHeight: 48,
+  padding: '14px 20px',
+  borderRadius: 10,
+  border: 'none',
+  fontSize: 16,
+  fontWeight: 600,
+  cursor: 'pointer',
+};
