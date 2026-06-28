@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import type { Language } from '../types';
 
 interface Props {
   message: string;
@@ -6,8 +7,33 @@ interface Props {
   onCall: () => void;
 }
 
+// Feature-local labels (kept out of the global i18n dictionary to stay self-contained).
+const SHARE_LABEL: Record<Language, string> = {
+  english: 'Share My Location',
+  singlish: 'Send My Location',
+  cantonese: '分享我的位置',
+  teochew: '分享我个位置',
+  hokkien: '分享我个位置',
+  chinese: '分享我的位置',
+  malay: 'Kongsi Lokasi Saya',
+  tamil: 'எனது இருப்பிடத்தைப் பகிர்',
+  hindi: 'मेरा स्थान साझा करें',
+};
+
+function shareLocation() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const url = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+    if (navigator.share) {
+      navigator.share({ title: 'My location', text: 'This is where I am:', url }).catch(() => {});
+    } else {
+      window.open(url, '_blank');
+    }
+  });
+}
+
 export function ProactiveHelpPopup({ message, onDismiss, onCall }: Props) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <>
@@ -42,6 +68,16 @@ export function ProactiveHelpPopup({ message, onDismiss, onCall }: Props) {
             }}
           >
             📞 {t.callLovedOne}
+          </button>
+          <button
+            onClick={shareLocation}
+            style={{
+              minHeight: 48, padding: '14px', borderRadius: 12,
+              background: '#2563eb', color: '#fff',
+              border: 'none', fontSize: 16, fontWeight: 700, cursor: 'pointer',
+            }}
+          >
+            📍 {SHARE_LABEL[language]}
           </button>
           <button
             onClick={onDismiss}
