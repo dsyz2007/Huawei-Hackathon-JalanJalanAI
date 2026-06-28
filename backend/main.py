@@ -17,7 +17,9 @@ from backend.src.models import (
     Checkpoint,
     Landmark,
     Instruction,
-    DemoRouteRequest
+    DemoRouteRequest,
+    CheckpointsRequest,
+    StoryRequest,
 )
 
 
@@ -47,6 +49,22 @@ def route(req: RouteRequest):
     if result is None:
         raise HTTPException(status_code=404, detail="Could not find that origin or destination.")
     return result
+
+
+@app.post("/checkpoints", response_model=list[RouteStep])
+def checkpoints_endpoint(req: CheckpointsRequest):
+    steps = orchestrator.get_checkpoints(req.route_id)
+    if steps is None:
+        raise HTTPException(status_code=404, detail="Route not found (it may have expired).")
+    return steps
+
+
+@app.post("/story", response_model=list[RouteStep])
+def story_endpoint(req: StoryRequest):
+    steps = orchestrator.get_story(req.route_id, req.language)
+    if steps is None:
+        raise HTTPException(status_code=404, detail="Route not found (it may have expired).")
+    return steps
 
 
 @app.post('/demo-route', response_model=RouteResponse)

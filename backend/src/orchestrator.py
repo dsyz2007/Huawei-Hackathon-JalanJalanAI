@@ -7,6 +7,10 @@ from dataclasses import replace
 # small and fast, and avoids hitting the free-tier token-per-minute rate limit.
 MAX_CANDIDATES = 10
 
+# In-memory store of generated routes so /checkpoints and /story can replay a route
+# by its id without re-running geocode/routing/overpass.
+_store: dict = {}
+
 
 
 def _format_distance(metres: float) -> str:
@@ -74,12 +78,65 @@ def build_route(origin: str, destination: str, language: str, prefer_shelter: bo
 
     steps = _build_steps(cps, features_per_cp, language, origin, destination, prefer_shelter)
 
-    return RouteResponse(
-        route_id="rt-" + uuid.uuid4().hex[:8],
-        distance=_format_distance(route_result.total_distance_m),
-        duration=_format_duration(route_result.total_time_s),
-        steps=steps,
+    route_id = "rt-" + uuid.uuid4().hex[:8]
+    distance = _format_distance(route_result.total_distance_m)
+    duration = _format_duration(route_result.total_time_s)
+
+    _store[route_id] = {
+        "cps": cps,
+        "features_per_cp": features_per_cp,
+        "steps": steps,
+        "origin": origin,
+        "destination": destination,
+        "prefer_shelter": prefer_shelter,
+    }
+    _persist_to_db(route_id, origin, destination, distance, duration, steps)
+
+    return RouteResponse(route_id=route_id, distance=distance, duration=duration, steps=steps)
+
+
+def get_checkpoints(route_id: str) -> list[RouteStep] | None:
+    entry = _store.get(route_id)
+    return entry["steps"] if entry else None
+
+
+def get_story(route_id: str, language: str) -> list[RouteStep] | None:
+    entry = _store.get(route_id)
+    if entry is None:
+        return None
+    # re-run only the selection/phrasing step in the new language (skips the slow steps)
+    return _build_steps(
+        entry["cps"], entry["features_per_cp"], language,
+        entry["origin"], entry["destination"], entry["prefer_shelter"],
     )
+
+
+def _persist_to_db(route_id, origin, destination, distance, duration, steps):
+    try:
+        from backend.src.database import SessionLocal
+        from backend.src import db_models
+        db = SessionLocal()
+        try:
+            db.merge(db_models.Route(route_id=route_id, origin=origin, destination=destination,
+                                     distance=distance, duration=duration))
+            for s in steps:
+                cp_id = f"{route_id}-{s.step}"
+                db.merge(db_models.DBCheckpoint(
+                    id=cp_id, route_id=route_id, step_number=s.step,
+                    action=s.checkpoint.action.value, lat=s.checkpoint.lat, lng=s.checkpoint.lng,
+                    distance=s.checkpoint.distance, bearing=s.checkpoint.bearing,
+                ))
+                if s.landmark:
+                    db.add(db_models.DBLandmark(
+                        checkpoint_id=cp_id, name=s.landmark.name, description=s.landmark.description,
+                        image_url=s.landmark.image_url, salience_score=s.landmark.salience_score,
+                    ))
+            db.commit()
+        finally:
+            db.close()
+    except Exception as e:
+        import sys
+        print(f"[db] route persist failed (non-fatal): {e}", file=sys.stderr)
 
 
 def _build_steps(cps, features_per_cp, language, origin, destination, prefer_shelter):
