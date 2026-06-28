@@ -12,7 +12,7 @@ interface LocationState {
 export function RoutePage() {
   const { state } = useLocation() as { state: LocationState };
   const navigate = useNavigate();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   if (!state?.route) {
     navigate('/');
