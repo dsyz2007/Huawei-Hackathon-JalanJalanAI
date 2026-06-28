@@ -20,7 +20,8 @@ export function useStoryNavigation(totalSteps: number) {
 
   const onPointerDown = useCallback((e: React.PointerEvent) => {
     pointerStartX.current = e.clientX;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    // NOTE: do NOT setPointerCapture here — capturing on the container steals
+    // clicks from child buttons (prev/next/audio), making them unresponsive.
   }, []);
 
   const onPointerUp = useCallback((e: React.PointerEvent) => {

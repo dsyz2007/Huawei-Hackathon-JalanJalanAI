@@ -121,7 +121,7 @@ export function StoryPage() {
 
   return (
     <div
-      style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', minHeight: '100dvh', display: 'flex', flexDirection: 'column', userSelect: 'none', touchAction: 'none' }}
+      style={{ maxWidth: 480, margin: '0 auto', fontFamily: 'sans-serif', minHeight: '100dvh', display: 'flex', flexDirection: 'column', userSelect: 'none', touchAction: 'pan-y' }}
       {...swipeHandlers}
     >
       <div style={{ padding: '16px 20px 8px' }}>
