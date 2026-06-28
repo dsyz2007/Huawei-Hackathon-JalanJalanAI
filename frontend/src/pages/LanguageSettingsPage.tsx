@@ -22,7 +22,7 @@ export function LanguageSettingsPage() {
     <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 20px' }}>
       <button
         onClick={() => navigate(-1)}
-        style={{ minHeight: 48, background: 'none', border: 'none', color: '#6b7280', fontSize: 15, cursor: 'pointer', padding: '0 8px', marginBottom: 12 }}
+        style={{ minHeight: 48, background: 'none', border: 'none', color: '#4b5563', fontSize: 15, cursor: 'pointer', padding: '0 8px', marginBottom: 12 }}
       >
         {t.back}
       </button>

@@ -122,7 +122,7 @@ export function HomePage() {
       {error && (
         <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: '12px 14px', marginBottom: 14 }}>
           <p style={{ color: '#b91c1c', margin: 0, fontSize: 14, fontWeight: 700 }}>{t.errorGenerating}</p>
-          <p style={{ color: '#9ca3af', margin: '4px 0 0', fontSize: 13 }}>
+          <p style={{ color: '#6b7280', margin: '4px 0 0', fontSize: 13 }}>
             Try a nearby MRT, mall, or 6-digit postal code — e.g. “Bedok MRT”, “Tampines Mall”, “238801”.
           </p>
         </div>
@@ -142,7 +142,7 @@ export function HomePage() {
         {loading ? t.generating : `🚶 ${t.generateRoute}`}
       </button>
 
-      <p style={{ textAlign: 'center', color: '#9ca3af', margin: '24px 0 12px', fontSize: 13 }}>
+      <p style={{ textAlign: 'center', color: '#6b7280', margin: '24px 0 12px', fontSize: 13 }}>
         {t.tryDemo}
       </p>
 

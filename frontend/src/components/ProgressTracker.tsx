@@ -16,7 +16,7 @@ export function ProgressTracker({ current, total, stepName }: Props) {
         {t.stepOf(current, total)}
       </p>
       {stepName && (
-        <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 6px' }}>
+        <p style={{ fontSize: 14, color: '#4b5563', margin: '0 0 6px' }}>
           {stepName}
         </p>
       )}

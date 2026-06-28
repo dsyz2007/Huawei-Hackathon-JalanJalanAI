@@ -128,7 +128,7 @@ export function StoryPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <button
             onClick={() => navigate('/route', { state: { route } })}
-            style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: '0 8px' }}
+            style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#4b5563', fontSize: 15, padding: '0 8px' }}
           >
             {t.routeOverview}
           </button>
@@ -141,7 +141,7 @@ export function StoryPage() {
             </button>
             <button
               onClick={() => setPanelOpen(true)}
-              style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 22, padding: '0 4px', lineHeight: 1 }}
+              style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#4b5563', fontSize: 22, padding: '0 4px', lineHeight: 1 }}
               aria-label="All steps"
             >
               ☰

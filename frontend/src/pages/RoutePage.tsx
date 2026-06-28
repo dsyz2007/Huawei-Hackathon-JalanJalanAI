@@ -31,7 +31,7 @@ export function RoutePage() {
       <div style={{ padding: '20px 20px 0' }}>
         <button
           onClick={() => navigate('/')}
-          style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: 15, padding: '0 8px', marginBottom: 12 }}
+          style={{ minHeight: 48, minWidth: 48, background: 'none', border: 'none', cursor: 'pointer', color: '#4b5563', fontSize: 15, padding: '0 8px', marginBottom: 12 }}
         >
           {t.back}
         </button>

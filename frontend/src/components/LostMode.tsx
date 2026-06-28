@@ -62,11 +62,11 @@ export function LostMode({ active, position, distanceToCheckpoint, onHelp }: Pro
     >
       <p style={{ fontWeight: 700, fontSize: 18, margin: '0 0 8px' }}>{t.areYouLost}</p>
       {distanceToCheckpoint !== null && (
-        <p style={{ color: '#6b7280', margin: '0 0 6px', fontSize: 14 }}>
+        <p style={{ color: '#4b5563', margin: '0 0 6px', fontSize: 14 }}>
           {t.nextCheckpoint(Math.round(distanceToCheckpoint))}
         </p>
       )}
-      <p style={{ color: '#6b7280', margin: '0 0 12px', fontSize: 14 }}>{t.lostHelp}</p>
+      <p style={{ color: '#4b5563', margin: '0 0 12px', fontSize: 14 }}>{t.lostHelp}</p>
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
         <button
           onClick={() => { setShowHelp(false); setLastMovedAt(Date.now()); }}

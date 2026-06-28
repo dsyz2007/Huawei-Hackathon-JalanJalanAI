@@ -34,7 +34,7 @@ export function AudioPlayer({ text, language }: Props) {
         )}
       </div>
       {voiceUnavailable && (
-        <p style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', margin: '8px 0 0', lineHeight: 1.5 }}>
+        <p style={{ fontSize: 12, color: '#6b7280', textAlign: 'center', margin: '8px 0 0', lineHeight: 1.5 }}>
           ⚠️ {t.voiceNotAvailable}
         </p>
       )}

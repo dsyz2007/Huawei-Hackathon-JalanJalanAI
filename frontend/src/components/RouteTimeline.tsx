@@ -39,7 +39,7 @@ export function RouteTimeline({ steps, currentStep, onSelectStep }: Props) {
                 height: 28,
                 borderRadius: '50%',
                 background: isDone ? '#22c55e' : isCurrent ? '#2563eb' : '#e5e7eb',
-                color: isDone || isCurrent ? '#fff' : '#6b7280',
+                color: isDone || isCurrent ? '#fff' : '#4b5563',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -55,7 +55,7 @@ export function RouteTimeline({ steps, currentStep, onSelectStep }: Props) {
                 {t.actions[step.checkpoint.action] ?? step.checkpoint.action}
               </span>
               {step.landmark && (
-                <span style={{ fontSize: 13, color: '#6b7280' }}>
+                <span style={{ fontSize: 13, color: '#4b5563' }}>
                   {getTranslatedLandmark(step.landmark.name, t)?.name ?? step.landmark.name}
                 </span>
               )}

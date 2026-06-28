@@ -100,7 +100,7 @@ export function StoryCard({ step, language, distanceToCheckpoint, direction }: P
             <p style={{ fontWeight: 700, fontSize: 20, margin: '0 0 4px' }}>
               {translatedLandmarkName ?? landmark.name}
             </p>
-            <p style={{ color: '#6b7280', fontSize: 14, margin: '0 0 14px' }}>
+            <p style={{ color: '#4b5563', fontSize: 14, margin: '0 0 14px' }}>
               {translatedLandmarkDesc ?? landmark.description}
             </p>
           </>
