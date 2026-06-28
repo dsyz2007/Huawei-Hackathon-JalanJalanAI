@@ -1,6 +1,7 @@
 import math
 import time
 import requests
+import polyline
 from dataclasses import dataclass
 from backend.src import gazetteer, config
 
@@ -30,6 +31,42 @@ def _get_token() -> str | None:
         _token_cache["token"] = token
         _token_cache["expires_at"] = now + 2 * 24 * 3600   # token lasts ~3 days; refresh after 2
     return token
+
+
+
+def _onemap_route(start: GeocodeResult, end: GeocodeResult, prefer_shelter: bool) -> RouteResult | None:
+    token = _get_token()
+    if token is None:
+        return None
+    try:
+        resp = requests.get(
+            f"{ONEMAP_BASE}/api/public/routingsvc/route",
+            params={
+                "start": f"{start.lat},{start.lng}",
+                "end": f"{end.lat},{end.lng}",
+                "routeType": "walk",   # shelter is handled downstream (ranking / Gemini), not here
+            },
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=20,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+    except (requests.RequestException, ValueError):
+        return None
+
+    geometry = data.get("route_geometry")
+    if not geometry:
+        return None
+    summary = data.get("route_summary") or {}
+
+    return RouteResult(
+        points=polyline.decode(geometry),                       # encoded string -> [(lat, lng), ...]
+        instructions=data.get("route_instructions") or [],
+        total_distance_m=float(summary.get("total_distance", 0)),
+        total_time_s=float(summary.get("total_time", 0)),
+        source="onemap",
+    )
+
 
 
 @dataclass
@@ -122,7 +159,10 @@ def _synthetic_route(start: GeocodeResult, end: GeocodeResult, num_points: int =
 
 
 def route(start: GeocodeResult, end: GeocodeResult, prefer_shelter: bool = False) -> RouteResult:
-    # Lesson 10: if config.has_onemap(), call live OneMap routing here instead.
-    return _synthetic_route(start, end)
+    if config.has_onemap():
+        result = _onemap_route(start, end, prefer_shelter)
+        if result is not None:
+            return result
+    return _synthetic_route(start, end)   # fallback: no key, or OneMap failed
 
 
