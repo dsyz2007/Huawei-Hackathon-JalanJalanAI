@@ -50,3 +50,11 @@ input:focus, select:focus {
   to { opacity: 1; transform: none; }
 }
 #root > * { animation: fadeUp 0.28s ease both; }
+
+/* Scale the whole UI up on larger screens (laptops & monitors) so it fills the
+   space and stays readable for older users, instead of a tiny fixed column.
+   Phones (< 900px) stay at 1x and use full width. */
+@media (min-width: 900px)  { #root { zoom: 1.1; } }
+@media (min-width: 1280px) { #root { zoom: 1.25; } }
+@media (min-width: 1600px) { #root { zoom: 1.4; } }
+@media (min-width: 2000px) { #root { zoom: 1.6; } }
