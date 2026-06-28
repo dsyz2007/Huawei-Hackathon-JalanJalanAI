@@ -21,6 +21,7 @@ export function HomePage() {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [preferShelter, setPreferShelter] = useState(false);
+  const [contact, setContact] = useState(() => localStorage.getItem('nextOfKin') ?? '');
   const { language, setLanguage, t } = useLanguage();
   const { fetchRoute, loading, error } = useRoute();
   const navigate = useNavigate();
@@ -88,6 +89,15 @@ export function HomePage() {
         />
         <span style={{ fontSize: 15 }}>{t.preferShelter}</span>
       </label>
+
+      <label style={labelStyle}>📞 {t.callLovedOne}</label>
+      <input
+        value={contact}
+        onChange={(e) => { setContact(e.target.value); localStorage.setItem('nextOfKin', e.target.value); }}
+        placeholder="+65 9123 4567"
+        inputMode="tel"
+        style={inputStyle}
+      />
 
       {error && <p style={{ color: '#ef4444', marginBottom: 12 }}>{t.errorGenerating}</p>}
 

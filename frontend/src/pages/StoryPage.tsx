@@ -220,7 +220,8 @@ export function StoryPage() {
           message={helpMessage}
           onDismiss={() => setHelpMessage(null)}
           onCall={() => {
-            window.location.href = `tel:${EMERGENCY_CONTACT}`;
+            const contact = localStorage.getItem('nextOfKin') || EMERGENCY_CONTACT;
+            window.location.href = `tel:${contact}`;
             setHelpMessage(null);
           }}
         />
